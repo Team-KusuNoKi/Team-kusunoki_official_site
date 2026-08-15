@@ -545,52 +545,6 @@ a { color: inherit; text-decoration: none; }
 }
 .sheet:not(.sheet--ink) .about-lead p { color: var(--on-paper-dim); }
 
-.about-block { margin-top: 96px; }
-.about-block__label {
-  margin: 0 0 32px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--rule-ink);
-  color: var(--on-ink-dim);
-}
-.sheet:not(.sheet--ink) .about-block__label {
-  border-color: var(--rule-paper);
-  color: var(--on-paper-dim);
-}
-
-/* 活動内容 */
-.about-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 44px 80px;
-}
-.about-list > div {
-  display: grid;
-  grid-template-columns: 40px 1fr;
-  gap: 0 16px;
-}
-.about-list .no {
-  font-family: var(--serif);
-  font-style: italic;
-  font-size: 1.2rem;
-  line-height: 2.1;
-  color: var(--accent);
-}
-.about-list h3 {
-  margin: 0 0 10px;
-  font-family: var(--mincho);
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  line-height: 2;
-}
-.about-list p {
-  margin: 0;
-  font-size: 0.84rem;
-  line-height: 2.1;
-  letter-spacing: 0.05em;
-  color: var(--on-ink-dim);
-}
-.sheet:not(.sheet--ink) .about-list p { color: var(--on-paper-dim); }
 
 /* ---------------------------------------------------------
    お知らせ（罫線で区切る一覧）
@@ -760,34 +714,14 @@ a.record:hover .record__arrow { transform: translate(4px, -4px); }
   letter-spacing: 0.08em;
 }
 
-.case__copy {
-  font-family: var(--mincho);
-  font-size: clamp(1rem, 1.6vw, 1.28rem);
-  line-height: 1.9;
-  letter-spacing: 0.06em;
-  margin: 0 0 26px;
-}
-
 .case__text {
   font-size: 0.9rem;
   line-height: 2.1;
   letter-spacing: 0.05em;
   color: var(--on-paper);
-  margin: 0 0 24px;
+  margin: 0 0 36px;
 }
 .sheet--ink .case__text { color: var(--on-ink); }
-
-/* あらすじの下に添える、形式の一行 */
-.case__note {
-  font-size: 0.82rem;
-  line-height: 2;
-  letter-spacing: 0.05em;
-  color: var(--on-paper-dim);
-  margin: 0 0 36px;
-  padding-top: 18px;
-  border-top: 1px solid var(--rule-paper);
-}
-.sheet--ink .case__note { color: var(--on-ink-dim); border-color: var(--rule-ink); }
 
 /* 仕様の3列表 */
 .spec {
@@ -1377,7 +1311,6 @@ a.record:hover .record__arrow { transform: translate(4px, -4px); }
   .record__title { grid-column: 3; }
   .record__arrow { grid-column: 4; grid-row: 1 / span 2; }
 
-  .about-list { grid-template-columns: 1fr; gap: 36px; }
   .pillars, .spec { grid-template-columns: 1fr; }
   .pillars > div + div,
   .spec > div + div { border-left: 0; border-top: 1px solid var(--rule-ink); }
@@ -1419,12 +1352,68 @@ a.record:hover .record__arrow { transform: translate(4px, -4px); }
   }
   .hero__latest-title { font-size: 0.98rem; margin: 6px 0 4px; }
   .hero__coord { display: none; }
-  .about-block { margin-top: 64px; }
   .about-statement { margin-bottom: 40px; }
   .btn { min-width: 0; width: 100%; gap: 24px; }
 
   .member-grid { border-top: 0; }
   .member { border-right: 0; }
+}
+
+/* ---------------------------------------------------------
+   スマートフォン
+   横に並べていたものを、素直に縦へ積み直す
+   --------------------------------------------------------- */
+
+@media (max-width: 620px) {
+  :root { --gutter: 22px; }
+
+  .sheet { padding: 72px 0; }
+  .index-no { font-size: 1.8rem; }
+
+  /* お知らせ：日付と分類を1行目、見出しを2行目に置く。
+     横4列のままだと見出しの幅が数文字分しか残らないため */
+  .record {
+    grid-template-columns: auto auto 1fr auto;
+    column-gap: 14px;
+    row-gap: 10px;
+    padding: 22px 2px;
+    align-items: baseline;
+  }
+  .record__no    { grid-column: 1; grid-row: 1; font-size: 0.95rem; }
+  .record__date  { grid-column: 2; grid-row: 1; }
+  .record__tag   { grid-column: 3; grid-row: 1; justify-self: start; }
+  .record__arrow { grid-column: 4; grid-row: 1; font-size: 1rem; }
+  .record__title {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    font-size: 0.94rem;
+    line-height: 1.9;
+  }
+
+  /* 作品タイトル：上下の文字サイズの差を詰めて、二行の題名として読ませる */
+  .case__title { padding-left: 16px; margin-bottom: 24px; }
+  .case__ruby {
+    font-size: 1.05rem;
+    letter-spacing: 0.16em;
+    margin-bottom: 2px;
+  }
+  .case__name { font-size: 1.75rem; letter-spacing: 0.06em; }
+
+  .case__watermark { display: none; }
+  .case__stamp { transform: scale(.85); transform-origin: right bottom; }
+
+  /* 肩書きが単語の途中で折り返さないよう、字間と大きさを詰める */
+  .hero__eyebrow { font-size: 0.76rem; letter-spacing: 0.14em; }
+  .tick { width: 28px; margin-right: 12px; }
+  .hero__desc { font-size: 0.92rem; line-height: 2; }
+
+  .about-statement { font-size: 1.3rem; line-height: 1.9; }
+  .closing__title { font-size: 1.7rem; }
+  .chapter__title { font-size: 1.9rem; }
+
+  .spec > div { padding: 14px 16px; }
+  .detail-table th { width: auto; display: block; padding-bottom: 0; border-bottom: 0; }
+  .detail-table td { display: block; padding-top: 6px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

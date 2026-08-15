@@ -31,6 +31,11 @@ python3 -m http.server 8000
 # → http://localhost:8000/
 ```
 
+作品詳細へのリンクは、Cloudflare Pages に合わせて拡張子なし
+（`/works/kusunoki-ga-kareta-hi`）にしてあります。
+`python3 -m http.server` は拡張子の補完をしないため、ローカルではこのリンクだけ
+404 になります。ローカルで開くときは `.html` を付けてください。本番では 200 です。
+
 ## 公開
 
 `main` ブランチへの push で Cloudflare Pages が自動的に配信します。
