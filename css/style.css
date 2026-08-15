@@ -505,22 +505,36 @@ a { color: inherit; text-decoration: none; }
    概要（トップページの ABOUT セクション）
    --------------------------------------------------------- */
 
-/* 大きく置くひとこと */
+/* 章の冒頭に置く一行 */
 .about-statement {
   font-family: var(--mincho);
-  font-size: clamp(1.7rem, 3.6vw, 2.9rem);
+  font-size: clamp(1.4rem, 2.8vw, 2.2rem);
   font-weight: 400;
-  line-height: 1.7;
+  line-height: 1.8;
   letter-spacing: 0.08em;
   margin: 0 0 56px;
 }
 .about-statement .em { color: var(--accent); }
 
-/* リード文。幅に応じて 3 → 2 → 1 段 */
+/* 概要の本文。幅に応じて 3 → 2 → 1 段 */
 .about-lead {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(268px, 1fr));
-  gap: 32px 56px;
+  gap: 40px 56px;
+}
+.about-lead h3 {
+  margin: 0 0 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule-ink);
+  font-family: var(--sans);
+  font-size: 0.64rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: var(--on-ink-dim);
+}
+.sheet:not(.sheet--ink) .about-lead h3 {
+  border-color: var(--rule-paper);
+  color: var(--on-paper-dim);
 }
 .about-lead p {
   margin: 0;
@@ -758,10 +772,22 @@ a.record:hover .record__arrow { transform: translate(4px, -4px); }
   font-size: 0.9rem;
   line-height: 2.1;
   letter-spacing: 0.05em;
+  color: var(--on-paper);
+  margin: 0 0 24px;
+}
+.sheet--ink .case__text { color: var(--on-ink); }
+
+/* あらすじの下に添える、形式の一行 */
+.case__note {
+  font-size: 0.82rem;
+  line-height: 2;
+  letter-spacing: 0.05em;
   color: var(--on-paper-dim);
   margin: 0 0 36px;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule-paper);
 }
-.sheet--ink .case__text { color: var(--on-ink-dim); }
+.sheet--ink .case__note { color: var(--on-ink-dim); border-color: var(--rule-ink); }
 
 /* 仕様の3列表 */
 .spec {
