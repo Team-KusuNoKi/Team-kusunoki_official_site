@@ -41,6 +41,25 @@ python3 -m http.server 8000
 `main` ブランチへの push で Cloudflare Pages が自動的に配信します。
 ビルドコマンドはなく、リポジトリの中身がそのまま公開されます。
 
+### CSS / JS を変えたとき
+
+HTML はすぐ差し替わりますが、CSS と JS はブラウザに 4 時間キャッシュされます。
+そのままだと、直したのに古い見た目のままに見えてしまいます。
+
+`css/style.css` か `js/main.js` を変えたら、全 HTML の読み込み行にある
+`?v=` の数字（日付）を上げてください。
+
+```html
+<link rel="stylesheet" href="/css/style.css?v=20260815">
+<script src="/js/main.js?v=20260815"></script>
+```
+
+一括で置き換える場合：
+
+```sh
+sed -i '' 's/?v=[0-9]\{8\}/?v=20260901/g' *.html works/*.html
+```
+
 ## 差し替えが必要な箇所
 
 `TODO` コメントで印をつけてあります。

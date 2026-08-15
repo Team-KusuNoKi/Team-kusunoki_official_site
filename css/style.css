@@ -1390,14 +1390,19 @@ a.record:hover .record__arrow { transform: translate(4px, -4px); }
     line-height: 1.9;
   }
 
-  /* 作品タイトル：上下の文字サイズの差を詰めて、二行の題名として読ませる */
+  /* 作品タイトル：「クスノキが枯れた日」で一つの題名なので、
+     上下で分けず同じ大きさで続けて組む */
   .case__title { padding-left: 16px; margin-bottom: 24px; }
-  .case__ruby {
-    font-size: 1.05rem;
-    letter-spacing: 0.16em;
-    margin-bottom: 2px;
+  .case__ruby,
+  .case__name {
+    display: inline;
+    font-family: var(--mincho);
+    font-weight: 400;
+    font-size: 1.55rem;
+    line-height: 1.5;
+    letter-spacing: 0.05em;
+    margin: 0;
   }
-  .case__name { font-size: 1.75rem; letter-spacing: 0.06em; }
 
   .case__watermark { display: none; }
   .case__stamp { transform: scale(.85); transform-origin: right bottom; }
@@ -1411,9 +1416,46 @@ a.record:hover .record__arrow { transform: translate(4px, -4px); }
   .closing__title { font-size: 1.7rem; }
   .chapter__title { font-size: 1.9rem; }
 
+  /* メンバー：縦に積まず、1人ずつ横に送る。
+     次のカードを少し覗かせてスクロールできることを示す */
+  .member-grid {
+    display: flex;
+    gap: 14px;
+    border-top: 0;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin: 0 calc(var(--gutter) * -1);
+    padding: 2px var(--gutter) 20px;
+  }
+  .member-grid::-webkit-scrollbar { display: none; }
+  .member {
+    flex: 0 0 78%;
+    scroll-snap-align: center;
+    border: 1px solid var(--rule-paper);
+    padding: 30px 26px 34px;
+  }
+  .sheet--ink .member { border-color: var(--rule-ink); }
+  .member__photo { width: 76px; margin-bottom: 18px; }
+
   .spec > div { padding: 14px 16px; }
   .detail-table th { width: auto; display: block; padding-bottom: 0; border-bottom: 0; }
   .detail-table td { display: block; padding-top: 6px; }
+}
+
+/* 画面がとくに狭い端末。文が語の途中で折り返さないよう、少しだけ縮める */
+@media (max-width: 380px) {
+  :root { --gutter: 18px; }
+
+  .about-statement { font-size: 1.15rem; letter-spacing: 0.03em; }
+  .closing__title { font-size: 1.45rem; letter-spacing: 0.03em; }
+  .chapter__title { font-size: 1.7rem; }
+  .hero__desc { font-size: 0.88rem; letter-spacing: 0.04em; }
+  .hero__eyebrow { font-size: 0.72rem; letter-spacing: 0.08em; }
+  .case__ruby,
+  .case__name { font-size: 1.4rem; }
+  .member { flex-basis: 82%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
