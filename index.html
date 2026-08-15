@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Team.KusuNoKi｜京都発の謎解き制作チーム</title>
+<meta name="description" content="Team.KusuNoKi（チームクスノキ）は京都発の謎解き・体験型ゲーム制作チームです。現実の風景と物語が静かに溶け合う体験を設計しています。">
+<link rel="canonical" href="https://team-kusunoki.com/">
+
+<!-- OGP：SNSでシェアされたときの表示 -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Team.KusuNoKi">
+<meta property="og:title" content="Team.KusuNoKi｜京都発の謎解き制作チーム">
+<meta property="og:description" content="現実の風景と物語が静かに溶け合う体験を設計する、謎解き・体験型ゲーム制作チームです。">
+<meta property="og:url" content="https://team-kusunoki.com/">
+<meta property="og:image" content="https://team-kusunoki.com/images/logo.jpg">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="/images/logo.png">
+<link rel="stylesheet" href="/css/style.css">
+<!-- JSが動く環境でだけ演出を有効にする（表示前に判定してちらつきを防ぐ） -->
+<script>document.documentElement.className += ' js';</script>
+</head>
+<body>
+
+<!-- 初回表示のときだけ出るローディング -->
+<div class="loader" aria-hidden="true">
+  <div class="loader__mark"><img src="/images/logo.png" alt=""></div>
+</div>
+
+<!-- マウスに追従するぼんやりした光 -->
+<div class="glow" aria-hidden="true"></div>
+<div class="scroll-progress" aria-hidden="true"></div>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="brand" href="/">
+      <img class="brand__mark" src="/images/logo.png" alt="">
+      <span class="brand__name">Team.KusuNoKi</span>
+    </a>
+
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="global-nav">
+      <span></span><span></span><span></span>
+      <span class="visually-hidden">メニューを開く</span>
+    </button>
+
+    <nav class="global-nav" id="global-nav">
+      <ul>
+        <li><a href="#news"><span class="no">01</span>お知らせ</a></li>
+        <li><a href="#about"><span class="no">02</span>概要</a></li>
+        <li><a href="#works"><span class="no">03</span>作品</a></li>
+        <li><a href="#members"><span class="no">04</span>メンバー</a></li>
+        <li><a href="#contact"><span class="no">05</span>お問い合わせ</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- ヒーロー -->
+  <section class="hero" id="top">
+    <div class="hero__photo" aria-hidden="true"></div>
+    <div class="leaves" aria-hidden="true"></div>
+
+    <div class="wrap hero__inner" data-stagger="140">
+      <p class="hero__eyebrow" data-reveal="up">
+        <span class="tick"></span>京都発・謎解き制作チーム
+      </p>
+
+      <h1 class="hero__title" data-reveal="up">
+        <span class="hero__line1">Team.</span>
+        <span class="hero__line2">KusuNoKi<span class="hero__dot"></span></span>
+      </h1>
+
+      <p class="hero__desc" data-reveal="up">
+        謎解き・体験型ゲームの企画、制作、運営を行っています。<br>
+        冊子と Web を組み合わせた、物語のある謎解きをつくるチームです。
+      </p>
+    </div>
+
+    <p class="hero__coord" aria-hidden="true">KYOTO, JAPAN</p>
+
+    <!-- 最新作へのショートカット -->
+    <a class="hero__latest" href="/works/kusunoki-ga-kareta-hi.html">
+      <span class="hero__latest-label">最新作</span>
+      <span class="hero__latest-title">クスノキが枯れた日</span>
+      <span class="hero__latest-meta">2025.11 公開 ／ 冊子 × LINE BOT</span>
+    </a>
+
+  </section>
+
+  <!-- 01 NEWS -->
+  <section class="sheet sheet--grid" id="news">
+    <div class="wrap">
+      <div class="chapter">
+        <div class="chapter__no">
+          <p class="index-no">01</p>
+          <p class="label">NEWS</p>
+        </div>
+        <div>
+          <p class="chapter__eyebrow" data-reveal="up">Latest records</p>
+          <h2 class="chapter__title" data-reveal="up">お知らせ</h2>
+        </div>
+      </div>
+
+      <!-- 新しいお知らせは、この li をコピーして一番上に追加してください。
+           番号は上から 01, 02, 03... と振り直します。
+           分類は NEWS / WORKS / EVENT / MEDIA を想定しています。 -->
+      <ul class="record-list" data-stagger="90">
+        <li data-reveal="up">
+          <div class="record lift">
+            <span class="record__no">01</span>
+            <time class="record__date" datetime="2026-08-06">2026.08.06</time>
+            <span class="record__tag">NEWS</span>
+            <span class="record__title">公式サイトを公開しました。</span>
+            <span class="record__arrow" aria-hidden="true">↗</span>
+          </div>
+        </li>
+        <li data-reveal="up">
+          <div class="record lift">
+            <span class="record__no">02</span>
+            <!-- TODO: 実際の頒布開始日に修正してください -->
+            <time class="record__date" datetime="2025-11-22">2025.11.22</time>
+            <span class="record__tag">WORKS</span>
+            <span class="record__title">『クスノキが枯れた日』を公開しました。</span>
+            <span class="record__arrow" aria-hidden="true">↗</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 02 ABOUT（概要） -->
+  <section class="sheet sheet--ink" id="about">
+    <div class="wrap">
+      <div class="chapter">
+        <div class="chapter__no">
+          <p class="index-no">02</p>
+          <p class="label">ABOUT</p>
+        </div>
+        <div>
+          <p class="chapter__eyebrow" data-reveal="up">Who we are</p>
+          <h2 class="chapter__title" data-reveal="up">概要</h2>
+        </div>
+      </div>
+
+      <p class="about-statement" data-reveal="up">
+        その謎は、<span class="em">すぐ隣</span>にある。
+      </p>
+
+      <div class="about-lead" data-stagger="70">
+        <p data-reveal="up">
+          キャンパスの片隅、古びた一枚の紙、誰かが残した言葉。
+          私たちは、現実の風景と物語が静かに溶け合う体験を設計します。
+          謎を解き終えたあと、いつもの景色が少し違って見えるように。
+        </p>
+        <p data-reveal="up">
+          Team.KusuNoKi は、謎解きと体験型ゲームをつくる制作チームです。
+          紙の上で完結する謎ではなく、その場に足を運び、手を動かし、
+          物語のなかを実際に歩いてもらう体験を目指して制作しています。
+        </p>
+        <p data-reveal="up">
+          「解けたかどうか」だけが体験の価値ではないと考えています。
+          解けなかった人にも、物語の手触りだけは持ち帰ってもらえること。
+          それが企画を立てるときの出発点になっています。
+        </p>
+      </div>
+
+      <!-- 活動内容 -->
+      <div class="about-block">
+        <p class="about-block__label label" data-reveal="up">WHAT WE DO / 活動内容</p>
+
+        <div class="about-list" data-stagger="70">
+          <div data-reveal="up">
+            <span class="no">01</span>
+            <div>
+              <h3>企画・シナリオ制作</h3>
+              <p>作品の世界観とストーリーを組み立て、体験全体の設計を行います。謎の難易度配分や、物語がどの順番で明かされるかもここで決まります。</p>
+            </div>
+          </div>
+          <div data-reveal="up">
+            <span class="no">02</span>
+            <div>
+              <h3>謎制作</h3>
+              <p>個々の謎を制作します。単体で解ける気持ちよさと、物語のなかでその謎を解く必然性の両立を重視しています。</p>
+            </div>
+          </div>
+          <div data-reveal="up">
+            <span class="no">03</span>
+            <div>
+              <h3>デザイン・Web 制作</h3>
+              <p>キービジュアル、配布物、作中で使用する Web サイトやアプリケーションなど、体験に必要なものを制作します。</p>
+            </div>
+          </div>
+          <div data-reveal="up">
+            <span class="no">04</span>
+            <div>
+              <h3>頒布・運営</h3>
+              <p>イベントでの頒布、進行のサポート、ヒントの提供などを担当します。解けないときの受け皿を用意しておくことも制作の一部だと考えています。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap" style="margin-top:88px;">
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee__inner">
+          <span>STORY &times; MYSTERY &times; PLACE —&nbsp;</span>
+          <span>STORY &times; MYSTERY &times; PLACE —&nbsp;</span>
+          <span>STORY &times; MYSTERY &times; PLACE —&nbsp;</span>
+          <span>STORY &times; MYSTERY &times; PLACE —&nbsp;</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 WORKS -->
+  <section class="sheet sheet--grid" id="works">
+    <div class="wrap">
+      <div class="chapter">
+        <div class="chapter__no">
+          <p class="index-no">03</p>
+          <p class="label">WORKS</p>
+        </div>
+        <div>
+          <p class="chapter__eyebrow" data-reveal="up">Case files</p>
+          <h2 class="chapter__title" data-reveal="up">作品</h2>
+        </div>
+      </div>
+
+      <article class="case">
+        <p class="case__watermark" aria-hidden="true">KUSUNOKI</p>
+
+        <div class="case__body">
+          <div class="case__visual" data-reveal="left">
+            <div class="case__photo">
+              <img src="/images/work-kusunoki.jpg" alt="クスノキが枯れた日 表紙">
+            </div>
+            <div class="case__stamp">
+              <small>EVIDENCE</small>
+              <strong>NO. 001</strong>
+            </div>
+          </div>
+
+          <div data-reveal="right">
+            <p class="case__label">WORKS / FILE.01</p>
+
+            <h3 class="case__title">
+              <span class="case__ruby">クスノキが</span>
+              <span class="case__name">枯れた日</span>
+            </h3>
+
+            <p class="case__copy">
+              京都大学吉田キャンパスを舞台に、<br>
+              “秘密” を暴く旅へ。
+            </p>
+
+            <p class="case__text">
+              文化祭の喧騒の陰に隠された奇妙な謎。正体不明の組織が残した記録。
+              そして、クスノキに眠る禁断の叡智。
+              冊子と LINE BOT を行き来しながら進む、物語体験型の謎解きゲームです。
+            </p>
+
+            <dl class="spec">
+              <div>
+                <dt>FORMAT</dt>
+                <dd>冊子 × LINE BOT</dd>
+              </div>
+              <div>
+                <dt>PLAY TIME</dt>
+                <dd>約 80 min</dd>
+              </div>
+              <div>
+                <dt>RELEASE</dt>
+                <dd>2025.11</dd>
+              </div>
+            </dl>
+
+            <div class="btn-row" style="margin-top:36px;">
+              <a class="btn" href="/works/kusunoki-ga-kareta-hi.html">VIEW CASE FILE</a>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 作品が増えたら、上の article をコピーして下に追加してください。
+           watermark・EVIDENCE 番号・FILE 番号も忘れず更新します。 -->
+    </div>
+  </section>
+
+  <!-- 04 MEMBERS -->
+  <section class="sheet sheet--ink" id="members">
+    <div class="wrap">
+      <div class="chapter">
+        <div class="chapter__no">
+          <p class="index-no">04</p>
+          <p class="label">MEMBERS</p>
+        </div>
+        <div>
+          <p class="chapter__eyebrow" data-reveal="up">Production team</p>
+          <h2 class="chapter__title" data-reveal="up">メンバー</h2>
+        </div>
+      </div>
+
+      <p class="section-lead" data-reveal="up">
+        企画、謎制作、デザイン、Web。それぞれの得意分野を持ち寄って作っています。
+      </p>
+
+      <!-- TODO: 以下はサンプルです。実際のメンバーに差し替えてください。
+           写真は images/members/ に置き、member__photo-ph を img に差し替えます。 -->
+      <div class="member-grid" data-stagger="90">
+        <article class="member lift" data-reveal="up">
+          <div class="member__photo"><span class="member__photo-ph">K</span></div>
+          <p class="member__role">DIRECTOR</p>
+          <h3 class="member__name">名前</h3>
+          <p class="member__text">担当領域や一言紹介をここに書きます。</p>
+        </article>
+
+        <article class="member lift" data-reveal="up">
+          <div class="member__photo"><span class="member__photo-ph">N</span></div>
+          <p class="member__role">PUZZLE</p>
+          <h3 class="member__name">名前</h3>
+          <p class="member__text">担当領域や一言紹介をここに書きます。</p>
+        </article>
+
+        <article class="member lift" data-reveal="up">
+          <div class="member__photo"><span class="member__photo-ph">D</span></div>
+          <p class="member__role">DESIGN</p>
+          <h3 class="member__name">名前</h3>
+          <p class="member__text">担当領域や一言紹介をここに書きます。</p>
+        </article>
+
+        <article class="member lift" data-reveal="up">
+          <div class="member__photo"><span class="member__photo-ph">W</span></div>
+          <p class="member__role">WEB</p>
+          <h3 class="member__name">名前</h3>
+          <p class="member__text">担当領域や一言紹介をここに書きます。</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 CONTACT -->
+  <section class="sheet closing" id="contact">
+    <p class="closing__kanji" aria-hidden="true">木</p>
+    <div class="wrap">
+      <p class="label" style="margin-bottom:26px;" data-reveal="up">CONTACT / お問い合わせ</p>
+      <h2 class="closing__title" data-reveal="up">お気軽に<br>お問い合わせください。</h2>
+      <p class="closing__text" data-reveal="up">作品についてのご質問、不具合のご報告、取材や出展のご依頼など、どんな内容でもお気軽にどうぞ。</p>
+
+      <div class="btn-row" data-reveal="up">
+        <!-- TODO: ここを実際の Google フォームの URL に差し替えてください。
+             フォームの「送信」→ リンクアイコン → URL をコピーして貼り付けます。 -->
+        <a class="btn" href="#" target="_blank" rel="noopener">お問い合わせフォームを開く</a>
+      </div>
+
+      <div class="note" data-reveal="up" style="margin-top:56px;">
+        <p>
+          お問い合わせは Google フォームで受け付けています。
+          お預かりした情報は、ご返信および必要な連絡のためにのみ使用します。
+        </p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <a class="brand" href="/">
+      <img class="brand__mark" src="/images/logo.png" alt="">
+      <span class="brand__name">Team.KusuNoKi</span>
+    </a>
+
+    <ul class="footer-nav">
+                  <li><a href="#news">お知らせ</a></li>
+      <li><a href="#about">概要</a></li>
+      <li><a href="#works">作品</a></li>
+      <li><a href="#members">メンバー</a></li>
+      <li><a href="#contact">お問い合わせ</a></li>
+    </ul>
+
+    <p class="copyright">&copy; 2026 TEAM.KUSUNOKI</p>
+    <a class="to-top" href="#top">BACK TO TOP ↑</a>
+  </div>
+</footer>
+
+<script src="/js/main.js"></script>
+</body>
+</html>
