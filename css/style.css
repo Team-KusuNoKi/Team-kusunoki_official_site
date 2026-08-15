@@ -516,11 +516,12 @@ a { color: inherit; text-decoration: none; }
 }
 .about-statement .em { color: var(--accent); }
 
-/* 概要の本文。幅に応じて 3 → 2 → 1 段 */
+/* 概要の本文。項目が増えたら 2 → 3 段に折り返す */
 .about-lead {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(268px, 1fr));
   gap: 40px 56px;
+  max-width: 46em;
 }
 .about-lead h3 {
   margin: 0 0 16px;
@@ -955,6 +956,33 @@ a.record:hover .record__arrow { transform: translate(4px, -4px); }
   line-height: 2;
   color: var(--on-paper-dim);
   margin: 0;
+}
+
+/* 横送りにしたときの位置表示。狭い画面でだけ出す */
+.member-dots {
+  display: none;
+  justify-content: center;
+  gap: 10px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.member-dots button {
+  display: block;
+  width: 7px; height: 7px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--on-paper-faint);
+  opacity: .45;
+  cursor: pointer;
+  transition: opacity .3s ease, transform .3s ease, background .3s ease;
+}
+.sheet--ink .member-dots button { background: var(--on-ink-faint); }
+.member-dots button[aria-current="true"] {
+  background: var(--accent);
+  opacity: 1;
+  transform: scale(1.3);
 }
 
 /* 墨のシートに置いたとき */
@@ -1416,28 +1444,57 @@ a.record:hover .record__arrow { transform: translate(4px, -4px); }
   .closing__title { font-size: 1.7rem; }
   .chapter__title { font-size: 1.9rem; }
 
-  /* メンバー：縦に積まず、1人ずつ横に送る。
-     次のカードを少し覗かせてスクロールできることを示す */
+  /* メンバー：縦に積まず、1人ずつ中央に送る。
+     scroll-snap-stop で、勢いよく払っても2枚以上飛ばさないようにする */
   .member-grid {
     display: flex;
-    gap: 14px;
+    gap: 12px;
     border-top: 0;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     margin: 0 calc(var(--gutter) * -1);
-    padding: 2px var(--gutter) 20px;
+    padding: 12px 0;
   }
   .member-grid::-webkit-scrollbar { display: none; }
+  /* 前後に余白を挟んで、最初と最後のカードも中央に来るようにする。
+     余白もカードも同じ基準（枠の内寸）の割合なので、幅が変わってもずれない */
+  .member-grid::before,
+  .member-grid::after {
+    content: "";
+    flex: 0 0 calc(12.5% - 12px);
+  }
   .member {
-    flex: 0 0 78%;
+    flex: 0 0 75%;
     scroll-snap-align: center;
+    scroll-snap-stop: always;
     border: 1px solid var(--rule-paper);
-    padding: 30px 26px 34px;
+    padding: 28px 24px 32px;
   }
   .sheet--ink .member { border-color: var(--rule-ink); }
+  .member:hover { background: none; }
   .member__photo { width: 76px; margin-bottom: 18px; }
+
+  /* 中央の1枚だけを前に出し、両隣は落として奥に見せる。
+     出現アニメーションより後に効かせたいので詳細度を上げてある */
+  .js .member[data-reveal],
+  .js .member[data-reveal].is-visible {
+    opacity: .28;
+    transform: scale(.93);
+    transition: opacity .45s ease, transform .45s ease, box-shadow .45s ease;
+  }
+  .js .member[data-reveal].is-active,
+  .js .member[data-reveal].is-visible.is-active {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 16px 38px rgba(0, 0, 0, .38);
+  }
+  .sheet:not(.sheet--ink) .js .member[data-reveal].is-active {
+    box-shadow: 0 16px 34px rgba(28, 27, 25, .16);
+  }
+
+  .member-dots { display: flex; }
 
   .spec > div { padding: 14px 16px; }
   .detail-table th { width: auto; display: block; padding-bottom: 0; border-bottom: 0; }
