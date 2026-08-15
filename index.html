@@ -3,18 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Team.KusuNoKi｜京都大学の学生による謎解き制作チーム</title>
+<title>Team.KusuNoKi 公式サイト｜京都大学の学生による謎解き制作チーム</title>
 <meta name="description" content="Team.KusuNoKi（チームクスノキ）は、謎解きが好きな京都大学の学生が集まった制作チームです。11月祭（NF）での出展を中心に、冊子や Web を組み合わせた物語のある謎解きをつくっています。">
 <link rel="canonical" href="https://team-kusunoki.com/">
 
 <!-- OGP：SNSでシェアされたときの表示 -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Team.KusuNoKi">
-<meta property="og:title" content="Team.KusuNoKi｜京都大学の学生による謎解き制作チーム">
+<meta property="og:title" content="Team.KusuNoKi 公式サイト｜京都大学の学生による謎解き制作チーム">
 <meta property="og:description" content="謎解きが好きな京都大学の学生が集まった制作チーム。11月祭（NF）での出展を中心に、物語のある謎解きをつくっています。">
 <meta property="og:url" content="https://team-kusunoki.com/">
 <meta property="og:image" content="https://team-kusunoki.com/images/logo.jpg">
 <meta name="twitter:card" content="summary_large_image">
+
+<!-- 検索結果に出るサイト名を明示する。旧サイトの情報が残らないようにするため -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://team-kusunoki.com/#website",
+      "name": "Team.KusuNoKi",
+      "alternateName": ["Team.KusuNoKi 公式サイト", "チームクスノキ"],
+      "url": "https://team-kusunoki.com/",
+      "inLanguage": "ja",
+      "publisher": { "@id": "https://team-kusunoki.com/#organization" }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://team-kusunoki.com/#organization",
+      "name": "Team.KusuNoKi",
+      "alternateName": "チームクスノキ",
+      "url": "https://team-kusunoki.com/",
+      "logo": "https://team-kusunoki.com/images/logo.png",
+      "foundingDate": "2025",
+      "description": "謎解きが好きな京都大学の学生が集まった制作チーム。11月祭（NF）での出展を中心に、冊子や Web を組み合わせた物語のある謎解きをつくっています。"
+    }
+  ]
+}
+</script>
 
 <link rel="icon" href="/images/logo.png">
 <link rel="stylesheet" href="/css/style.css">
@@ -82,7 +110,7 @@
     <p class="hero__coord" aria-hidden="true">KYOTO, JAPAN</p>
 
     <!-- 最新作へのショートカット -->
-    <a class="hero__latest" href="/works/kusunoki-ga-kareta-hi.html">
+    <a class="hero__latest" href="/works/kusunoki-ga-kareta-hi">
       <span class="hero__latest-label">最新作</span>
       <span class="hero__latest-title">クスノキが枯れた日</span>
       <span class="hero__latest-meta">2025.11 公開 ／ 冊子 × Web</span>
@@ -295,7 +323,7 @@
             </dl>
 
             <div class="btn-row" style="margin-top:36px;">
-              <a class="btn" href="/works/kusunoki-ga-kareta-hi.html">VIEW CASE FILE</a>
+              <a class="btn" href="/works/kusunoki-ga-kareta-hi">VIEW CASE FILE</a>
             </div>
           </div>
         </div>
