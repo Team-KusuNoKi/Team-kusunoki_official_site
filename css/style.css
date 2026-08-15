@@ -1482,7 +1482,7 @@ a.record:hover .record__arrow { transform: translate(4px, -4px); }
   .js .member[data-reveal].is-visible {
     opacity: .28;
     transform: scale(.93);
-    transition: opacity .45s ease, transform .45s ease, box-shadow .45s ease;
+    transition: opacity .18s ease-out, transform .24s ease-out, box-shadow .24s ease-out;
   }
   .js .member[data-reveal].is-active,
   .js .member[data-reveal].is-visible.is-active {

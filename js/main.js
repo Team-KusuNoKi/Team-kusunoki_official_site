@@ -201,14 +201,12 @@
       track.addEventListener(ev, hold, { passive: true });
     });
 
-    // 実際のスクロール位置から、いま何人目かを拾い直す
-    var settle = null;
+    // スクロールしている間も見に行き、中央に来た時点で切り替える。
+    // 止まるのを待つと、指を離してから明るくなるまでが遅く感じられるため。
+    // scroll は1フレームに1回しか飛ばないので、そのまま拾って差し支えない
     track.addEventListener('scroll', function () {
-      if (settle) clearTimeout(settle);
-      settle = setTimeout(function () {
-        index = nearest();
-        mark();
-      }, 100);
+      var i = nearest();
+      if (i !== index) { index = i; mark(); }
     }, { passive: true });
 
     // 画面に入っている間だけ動かす
