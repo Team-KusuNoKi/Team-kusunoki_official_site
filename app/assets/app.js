@@ -10,8 +10,9 @@ try { state = restoreState(scenario, localStorage.getItem(storageKey)); }
 catch { state = initialState(scenario); storageWarning = 'このブラウザでは進行状況を保存できません。'; }
 let feedback = '';
 let composerExpanded = false;
-let problemExpanded = false;
+let menuExpanded = false;
 const icons = {
+  menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
   chat: '<path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.5H8l-5 2 1.8-5A8.5 8.5 0 1 1 21 11.5Z"/>',
   hint: '<path d="M9 18h6m-5 4h4M8 14a6 6 0 1 1 8 0l-1 2H9Z"/>',
   book: '<path d="M12 5v16M12 5C8 2 4 3 2 4v15c4-1 7 0 10 2 3-2 6-3 10-2V4c-2-1-6-2-10 1Z"/>',
@@ -19,7 +20,6 @@ const icons = {
   arrow: '<path d="M5 12h14m-6-6 6 6-6 6"/>',
   send: '<path d="m3 3 19 9-19 9 4-9-4-9Zm4 9h15"/>',
   edit: '<path d="m16 5 3 3M4 20l4.2-.8L20 7.4 16.6 4 4.8 15.8 4 20Z"/>',
-  chevron: '<path d="m6 9 6 6 6-6"/>',
   check: '<path d="m5 12 4 4L19 6"/>',
   close: '<path d="m6 6 12 12M6 18 18 6"/>',
   reset: '<path d="M3 11a9 9 0 1 1 2 7M3 3v8h8"/>',
@@ -28,6 +28,73 @@ const icons = {
 const icon = name => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[name] ?? ''}</svg>`;
 const esc = value => String(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const current = () => scenario.problems.find(p => p.id === state.selected);
+const surfaceAnimations = new WeakMap();
+
+function animateSurface(element, opening, offset = 20) {
+  if (!element) return Promise.resolve(false);
+  const previous = surfaceAnimations.get(element);
+  const currentStyle = previous ? getComputedStyle(element) : null;
+  const interruptedFrame = currentStyle ? { opacity: currentStyle.opacity, transform: currentStyle.transform } : null;
+  previous?.cancel();
+  if (!element.animate || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return Promise.resolve(true);
+  const hiddenFrame = { opacity: 0, transform: `translateY(${offset}px)` };
+  const visibleFrame = { opacity: 1, transform: 'translateY(0)' };
+  const animation = element.animate([interruptedFrame ?? (opening ? hiddenFrame : visibleFrame), opening ? visibleFrame : hiddenFrame], {
+    duration: opening ? 260 : 180, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'both',
+  });
+  surfaceAnimations.set(element, animation);
+  return animation.finished.then(() => {
+    if (surfaceAnimations.get(element) !== animation) return false;
+    surfaceAnimations.delete(element);
+    animation.cancel();
+    return true;
+  }).catch(() => false);
+}
+
+function setMenuExpanded(expanded) {
+  if (menuExpanded === expanded) return;
+  menuExpanded = expanded;
+  const menu = document.querySelector('#navigation-menu');
+  document.querySelector('.menu-button')?.setAttribute('aria-expanded', String(expanded));
+  if (!menu) return;
+  menu.hidden = false;
+  menu.inert = !expanded;
+  animateSurface(menu, expanded, -10).then(finished => {
+    if (finished && !menuExpanded && menu.isConnected) menu.hidden = true;
+  });
+}
+
+function setComposerExpanded(expanded) {
+  if (composerExpanded === expanded) return;
+  composerExpanded = expanded;
+  const composer = document.querySelector('.composer-area');
+  const fab = document.querySelector('.answer-fab');
+  if (!composer || !fab) return;
+  const focusWasInside = composer.contains(document.activeElement);
+  composer.hidden = false;
+  composer.inert = !expanded;
+  fab.hidden = expanded;
+  fab.setAttribute('aria-expanded', String(expanded));
+  animateSurface(composer, expanded).then(finished => {
+    if (finished && !composerExpanded && composer.isConnected) composer.hidden = true;
+  });
+  if (!expanded) {
+    animateSurface(fab, true, 8);
+    if (focusWasInside) fab.focus({ preventScroll: true });
+  }
+}
+
+function closePanel() {
+  if (!panel.open || panel.classList.contains('is-closing')) return;
+  panel.classList.add('is-closing');
+  panel.inert = true;
+  animateSurface(panel, false, 24).then(finished => {
+    if (!finished) return;
+    panel.close();
+    panel.classList.remove('is-closing');
+    panel.inert = false;
+  });
+}
 
 function save() {
   try { localStorage.setItem(storageKey, JSON.stringify(state)); storageWarning = ''; }
@@ -49,6 +116,7 @@ function answerFormMarkup(p) {
 }
 
 function render({ scroll = false } = {}) {
+  const chatScrollTop = document.querySelector('.chat-area')?.scrollTop ?? 0;
   const p = current();
   const solved = state.solved.includes(p.id);
   const composerVisible = solved || composerExpanded;
@@ -56,28 +124,33 @@ function render({ scroll = false } = {}) {
   const branchPending = solved && p.branches && !state.branches[p.id];
   app.innerHTML = `<div class="shell">
     <main id="main" class="workspace">
-      <header class="topbar"><a class="brand" href="../works/november-kyusai/" aria-label="作品ページへ戻る"><span class="brand-mark" aria-hidden="true">11</span><span class="brand-title">${esc(scenario.title)}</span></a><button class="hint-button" data-action="hints" aria-label="ヒント">${icon('hint')}<span>ヒント</span></button></header>
-      <div class="problem-switcher"><details id="problem-disclosure" class="problem-disclosure" ${problemExpanded ? 'open' : ''}><summary><span class="problem-summary"><strong>${esc(p.id)}</strong><span>${esc(p.title)}</span></span>${icon('chevron')}</summary><div class="problem-content"><p>${esc(p.prompt)}</p><nav class="problem-nav" aria-label="問題を切り替える">${scenario.problems.map(item => `<button data-action="select" data-id="${esc(item.id)}" aria-pressed="${item.id === p.id}">${esc(item.id)}</button>`).join('')}</nav></div></details></div>
+      <header class="topbar"><div class="brand"><div class="navigation-menu"><button class="menu-button" data-action="toggle-menu" aria-label="メニュー" aria-controls="navigation-menu" aria-expanded="${menuExpanded}">${icon('menu')}</button><nav id="navigation-menu" class="menu-items" aria-label="メインメニュー" ${menuExpanded ? '' : 'hidden'}><button class="active" data-action="chat" aria-current="page">${icon('chat')}<span>トーク</span></button><button data-action="hints">${icon('hint')}<span>ヒント</span></button><button data-action="notebook">${icon('book')}<span>ノート</span>${unlockedCards(scenario, state).length ? `<small class="nav-badge">${unlockedCards(scenario, state).length}</small>` : ''}</button><button data-action="history">${icon('history')}<span>履歴</span></button></nav></div><span class="brand-title">${esc(scenario.title)}</span></div><button class="hint-button" data-action="hints" aria-label="ヒント">${icon('hint')}<span>ヒント</span></button></header>
       <section class="chat-area" aria-label="謎解き会話">
         <div id="messages" class="messages" role="log" aria-label="会話" aria-live="polite" aria-relevant="additions text">${state.messages.map(messageMarkup).join('')}</div>
         ${branchPending ? `<div class="branch-options" aria-label="会話の選択肢">${p.branches.map(b => `<button data-action="branch" data-id="${esc(b.id)}">${esc(b.label)}${icon('arrow')}</button>`).join('')}</div>` : ''}
         <div class="chapter-end ${solved ? '' : 'hidden'}"><span>${esc(p.instruction)}</span></div>
       </section>
-      <section class="composer-area" aria-label="回答入力" ${composerVisible ? '' : 'hidden'}>
-        ${solved ? '' : `<div class="answer-composer-heading"><span>回答欄</span><button class="composer-close" data-action="close-composer" aria-label="回答欄を閉じる">${icon('close')}</button></div>`}
+      <section id="composer-area" class="composer-area" aria-label="問題と回答" ${composerVisible ? '' : 'hidden'}>
+        ${solved ? '' : `<div class="answer-composer-heading"><span>問題と回答</span><button class="composer-close" data-action="close-composer" aria-label="回答エリアを閉じる">${icon('close')}</button></div>`}
+        <div class="answer-problem"><h2><span class="question-tag">${esc(p.id)}</span>${esc(p.title)}</h2><p>${esc(p.prompt)}</p><nav class="problem-nav" aria-label="問題を切り替える">${scenario.problems.map(item => `<button data-action="select" data-id="${esc(item.id)}" aria-pressed="${item.id === p.id}">${esc(item.id)}</button>`).join('')}</nav></div>
+        ${solved ? '' : '<div class="answer-entry-label">回答欄</div>'}
 
         ${solved ? `<div class="solved-composer"><span class="solved-label">${icon('check')}${esc(p.id)}は正解しました</span>${branchPending ? '<span class="muted">会話の選択肢を選んでください</span>' : index < scenario.problems.length - 1 ? `<button class="primary-button" data-action="next">次の問題へ${icon('arrow')}</button>` : '<button class="primary-button" data-action="history">会話を読み返す</button>'}</div>` : answerFormMarkup(p)}
         ${solved ? '<div class="composer-meta"><span>会話はあとから読み返せます。</span></div>' : p.type === 'text' ? '' : `<div class="composer-meta"><span>${p.type === 'multiple' ? '当てはまるものをすべて選んでください。' : 'ひとつ選んでください。'}</span></div>`}
         <div class="feedback" role="status">${esc(feedback || storageWarning)}</div>
       </section>
-      ${solved || composerExpanded ? '' : `<button class="answer-fab" data-action="open-composer" aria-label="回答欄を開く" aria-expanded="false">${icon('edit')}<span>回答</span></button>`}
-      <nav class="bottom-nav" aria-label="メインメニュー"><button class="active" data-action="chat" aria-current="page">${icon('chat')}<span>トーク</span></button><button data-action="hints">${icon('hint')}<span>ヒント</span></button><button data-action="notebook">${icon('book')}<span>ノート${unlockedCards(scenario, state).length ? `<small class="nav-badge">${unlockedCards(scenario, state).length}</small>` : ''}</span></button><button data-action="history">${icon('history')}<span>履歴</span></button></nav>
+      ${solved ? '' : `<button class="answer-fab" data-action="open-composer" aria-label="回答エリアを開く" aria-controls="composer-area" aria-expanded="${composerExpanded}" ${composerExpanded ? 'hidden' : ''}>${icon('edit')}<span>回答</span></button>`}
     </main>
   </div>`;
+  document.querySelector('.chat-area').scrollTop = chatScrollTop;
   if (scroll) requestAnimationFrame(() => document.querySelector('.chat-area').scrollTo({ top: document.querySelector('.chat-area').scrollHeight, behavior: 'smooth' }));
 }
 
 function openPanel(kind, { keepFocus = false } = {}) {
+  const wasOpen = panel.open;
+  surfaceAnimations.get(panel)?.cancel();
+  panel.classList.remove('is-closing');
+  panel.inert = false;
   const focusedId = keepFocus ? document.activeElement?.id : null;
   let title = '';
   let content = '';
@@ -102,12 +175,14 @@ function openPanel(kind, { keepFocus = false } = {}) {
   }
   panel.innerHTML = `<div class="panel-header"><div><span class="eyebrow">NOVEMBER ARCHIVE</span><h2 id="panel-title">${title}</h2></div><button class="icon-button" data-action="close" aria-label="閉じる">${icon('close')}</button></div><div class="panel-body">${content}</div>`;
   if (!panel.open) panel.showModal();
+  animateSurface(wasOpen ? panel.querySelector('.panel-body') : panel, true, wasOpen ? 8 : 24);
   (focusedId ? document.getElementById(focusedId) : panel.querySelector('[data-action="close"]'))?.focus();
 }
 
 function selectProblem(id) {
   if (!scenario.problems.some(p => p.id === id)) return;
-  state = { ...state, selected: id }; composerExpanded = false; feedback = ''; save(); render();
+  state = { ...state, selected: id }; feedback = ''; save(); render();
+  if (composerExpanded) animateSurface(document.querySelector('.composer-area'), true, 8);
 }
 
 function answer(value) {
@@ -122,22 +197,27 @@ function answer(value) {
 
 document.addEventListener('click', event => {
   const button = event.target.closest('[data-action]');
+  const action = button?.dataset.action;
+  if (!event.target.closest('.navigation-menu') || event.target.closest('.menu-items [data-action]')) setMenuExpanded(false);
   if (!button) return;
-  const action = button.dataset.action;
-  if (action === 'chat') { if (panel.open) panel.close(); }
-  else if (action === 'open-composer') { composerExpanded = true; render(); requestAnimationFrame(() => (document.querySelector('#answer') ?? document.querySelector('#answer-form input'))?.focus()); }
-  else if (action === 'close-composer') { composerExpanded = false; render(); document.querySelector('.answer-fab')?.focus(); }
+  if (action === 'toggle-menu') setMenuExpanded(!menuExpanded);
+  else if (action === 'chat') { closePanel(); document.querySelector('.menu-button')?.focus({ preventScroll: true }); }
+  else if (action === 'open-composer') setComposerExpanded(true);
+  else if (action === 'close-composer') setComposerExpanded(false);
   else if (action === 'select') selectProblem(button.dataset.id);
   else if (['hints', 'history', 'notebook', 'help', 'reset'].includes(action)) openPanel(action);
-  else if (action === 'close') panel.close();
-  else if (action === 'next') selectProblem(scenario.problems[scenario.problems.indexOf(current()) + 1]?.id);
+  else if (action === 'close') closePanel();
+  else if (action === 'next') { composerExpanded = false; selectProblem(scenario.problems[scenario.problems.indexOf(current()) + 1]?.id); }
   else if (action === 'branch') { state = chooseBranch(scenario, state, state.selected, button.dataset.id); save(); render({ scroll: true }); }
   else if (action === 'reveal-hint') { state.hints[state.selected] = Math.min((state.hints[state.selected] ?? 0) + 1, current().hints.length); save(); openPanel('hints', { keepFocus: true }); }
-  else if (action === 'confirm-reset') { state = initialState(scenario); feedback = ''; save(); panel.close(); render(); }
+  else if (action === 'confirm-reset') { state = initialState(scenario); composerExpanded = false; feedback = ''; save(); closePanel(); render(); }
 });
-document.addEventListener('toggle', event => {
-  if (event.target.id === 'problem-disclosure' && event.target.isConnected) problemExpanded = event.target.open;
-}, true);
+document.addEventListener('keydown', event => {
+  if (event.key !== 'Escape' || panel.open) return;
+  if (menuExpanded) {
+    setMenuExpanded(false); document.querySelector('.menu-button')?.focus({ preventScroll: true });
+  } else if (composerExpanded) setComposerExpanded(false);
+});
 document.addEventListener('submit', event => {
   if (event.target.id === 'answer-form') {
     event.preventDefault();
@@ -152,7 +232,8 @@ document.addEventListener('submit', event => {
     save(); openPanel('notebook');
   }
 });
-panel.addEventListener('click', event => { const rect = panel.getBoundingClientRect(); if (event.target === panel && (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom)) panel.close(); });
+panel.addEventListener('click', event => { const rect = panel.getBoundingClientRect(); if (event.target === panel && (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom)) closePanel(); });
+panel.addEventListener('cancel', event => { event.preventDefault(); closePanel(); });
 render();
 
 // ブラウザが対応している場合だけ、画面と同じ操作をWebMCPへ登録します。
