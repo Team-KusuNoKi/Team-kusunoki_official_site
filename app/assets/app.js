@@ -131,8 +131,8 @@ function render({ scroll = false } = {}) {
         <div class="chapter-end ${solved ? '' : 'hidden'}"><span>${esc(p.instruction)}</span></div>
       </section>
       <section id="composer-area" class="composer-area" aria-label="問題と回答" ${composerVisible ? '' : 'hidden'}>
-        ${solved ? '' : `<div class="answer-composer-heading"><span>問題と回答</span><button class="composer-close" data-action="close-composer" aria-label="回答エリアを閉じる">${icon('close')}</button></div>`}
-        <div class="answer-problem"><h2><span class="question-tag">${esc(p.id)}</span>${esc(p.title)}</h2><p>${esc(p.prompt)}</p><nav class="problem-nav" aria-label="問題を切り替える">${scenario.problems.map(item => `<button data-action="select" data-id="${esc(item.id)}" aria-pressed="${item.id === p.id}">${esc(item.id)}</button>`).join('')}</nav></div>
+        <div class="answer-composer-heading"><h2><span class="question-tag">${esc(p.id)}</span>${esc(p.title)}</h2>${solved ? '' : `<button class="composer-close" data-action="close-composer" aria-label="回答エリアを閉じる">${icon('close')}</button>`}</div>
+        <div class="answer-problem"><p>${esc(p.prompt)}</p></div>
         ${solved ? '' : '<div class="answer-entry-label">回答欄</div>'}
 
         ${solved ? `<div class="solved-composer"><span class="solved-label">${icon('check')}${esc(p.id)}は正解しました</span>${branchPending ? '<span class="muted">会話の選択肢を選んでください</span>' : index < scenario.problems.length - 1 ? `<button class="primary-button" data-action="next">次の問題へ${icon('arrow')}</button>` : '<button class="primary-button" data-action="history">会話を読み返す</button>'}</div>` : answerFormMarkup(p)}
