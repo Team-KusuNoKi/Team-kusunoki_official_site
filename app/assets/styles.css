@@ -32,6 +32,7 @@ button:focus-visible, a:focus-visible { background-color: var(--accent-soft); }
 
 .shell { max-width: 480px; margin: auto; overflow: hidden; background: var(--white); }
 .workspace { position: relative; height: 100dvh; display: flex; flex-direction: column; min-width: 0; background: var(--canvas); }
+.workspace::before { content: ""; position: absolute; z-index: 0; inset: -4px; background: url("./chat-background.png") 62% center / cover no-repeat; opacity: .22; filter: saturate(.3) blur(2px); pointer-events: none; }
 .topbar { position: relative; z-index: 5; display: flex; align-items: center; justify-content: space-between; padding: 12px 18px 10px; padding-top: max(12px, env(safe-area-inset-top)); flex-shrink: 0; background: var(--white); }
 .brand { display: flex; align-items: center; gap: 11px; border-radius: 10px; }
 .brand-title { font: 600 19px var(--serif); letter-spacing: .1em; }
@@ -59,26 +60,27 @@ button:focus-visible, a:focus-visible { background-color: var(--accent-soft); }
 .problem-nav button[aria-pressed="true"] { background: var(--accent); }
 .problem-nav button:hover, .problem-nav button:focus-visible { background: var(--accent-soft); }
 
-.chat-area { flex: 1; min-height: 0; overflow: auto; padding: 22px 18px calc(120px + env(safe-area-inset-bottom)); scrollbar-width: thin; overscroll-behavior: contain; scroll-padding-bottom: 15px; }
+.chat-area { position: relative; z-index: 1; flex: 1; min-height: 0; overflow: auto; padding: 22px 18px calc(120px + env(safe-area-inset-bottom)); scrollbar-width: thin; overscroll-behavior: contain; scroll-padding-bottom: 15px; }
 .messages { display: grid; gap: 22px; }
 .message { display: flex; align-items: flex-start; gap: 9px; }
 .avatar { display: flex; align-items: center; justify-content: center; flex-shrink: 0; width: 29px; height: 29px; margin-top: 22px; border-radius: 50%; background: var(--accent); font: 12px var(--serif); }
 .message-body { max-width: calc(100% - 38px); min-width: 0; }
-.speaker { display: flex; align-items: center; gap: 9px; margin-bottom: 6px; color: var(--muted); font-size: 10px; }
+.speaker { display: flex; align-items: center; gap: 9px; width: fit-content; margin-bottom: 6px; padding: 2px 8px; border-radius: 999px; background: var(--white); color: var(--muted); font-size: 10px; }
 .speaker small { font-size: 9px; }
 .bubble { padding: 13px 15px; border-radius: 18px; background: var(--white); font-size: 13px; line-height: 1.95; white-space: pre-wrap; overflow-wrap: anywhere; }
 .own { justify-content: flex-end; }
 .own .message-body { max-width: 85%; }
-.own .speaker { justify-content: flex-end; }
+.own .speaker { justify-content: flex-end; margin-left: auto; }
 .own .bubble { background: var(--ink); color: var(--white); }
 .retry .bubble { background: var(--accent-soft); }
-.milestone { display: flex; align-items: center; gap: 8px; padding-left: 38px; color: var(--accent-ink); font-size: 11px; }
+.milestone { display: flex; align-items: center; gap: 8px; margin-left: 38px; padding: 10px 14px; border-radius: 14px; background: var(--accent-soft); color: var(--accent-ink); font-size: 11px; }
 .milestone svg { width: 15px; height: 15px; }
 .branch-options { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 22px; padding-left: 38px; }
 .branch-options button { display: flex; align-items: center; gap: 13px; min-height: 44px; padding: 10px 14px; border-radius: 999px; background: var(--accent-soft); font-size: 12px; }
 .branch-options button:hover, .branch-options button:focus-visible { background: #ffbd8d; }
 .branch-options svg { width: 15px; height: 15px; color: var(--accent-ink); }
 .chapter-end { margin-top: 20px; color: var(--muted); font-size: 11px; text-align: center; }
+.chapter-end > span { display: inline-block; padding: 8px 12px; border-radius: 14px; background: var(--white); }
 
 .composer-area { position: absolute; z-index: 3; left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); max-height: min(75dvh, 620px); overflow: auto; overscroll-behavior: contain; padding: 12px 16px 16px; border-radius: 22px; background: var(--accent-soft); box-shadow: 0 12px 32px #20202026; }
 .answer-composer-heading { display: flex; align-items: center; justify-content: space-between; min-height: 36px; margin-bottom: 8px; font-size: 12px; font-weight: 600; }
@@ -144,6 +146,7 @@ dialog.is-closing::backdrop { animation: backdrop-out 180ms ease both; }
 .question-tag { display: inline-block; padding: 3px 8px; border-radius: 999px; background: var(--accent); font-size: 10px; }
 .log-entry > summary .question-tag { margin-right: 10px; font-family: var(--sans); }
 .history-messages { display: grid; gap: 15px; margin-top: 12px; }
+.history-messages .milestone { margin-left: 0; }
 .history-messages .bubble { background: var(--canvas); font-size: 12px; }
 .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
 .card-grid > .empty-state { grid-column: 1 / -1; }
