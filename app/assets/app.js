@@ -9,6 +9,8 @@ let storageWarning = '';
 try { state = restoreState(scenario, localStorage.getItem(storageKey)); }
 catch { state = initialState(scenario); storageWarning = 'このブラウザでは進行状況を保存できません。'; }
 let feedback = '';
+let composerExpanded = false;
+let problemExpanded = false;
 const icons = {
   chat: '<path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.5H8l-5 2 1.8-5A8.5 8.5 0 1 1 21 11.5Z"/>',
   hint: '<path d="M9 18h6m-5 4h4M8 14a6 6 0 1 1 8 0l-1 2H9Z"/>',
@@ -16,6 +18,8 @@ const icons = {
   history: '<path d="M3 11a9 9 0 1 1 2 7M3 3v8h8m1-5v6l4 2"/>',
   arrow: '<path d="M5 12h14m-6-6 6 6-6 6"/>',
   send: '<path d="m3 3 19 9-19 9 4-9-4-9Zm4 9h15"/>',
+  edit: '<path d="m16 5 3 3M4 20l4.2-.8L20 7.4 16.6 4 4.8 15.8 4 20Z"/>',
+  chevron: '<path d="m6 9 6 6 6-6"/>',
   check: '<path d="m5 12 4 4L19 6"/>',
   close: '<path d="m6 6 12 12M6 18 18 6"/>',
   reset: '<path d="M3 11a9 9 0 1 1 2 7M3 3v8h8"/>',
@@ -31,33 +35,42 @@ function save() {
 }
 
 function messageMarkup(m) {
-  if (m.kind === 'success') return `<div class="milestone">${icon('check')}<span>${esc(m.text)}</span><span class="milestone-line"></span></div>`;
+  if (m.kind === 'success') return `<div class="milestone">${icon('check')}<span>${esc(m.text)}</span></div>`;
   const own = m.kind === 'answer';
   return `<article class="message ${own ? 'own' : ''} ${m.kind === 'error' ? 'retry' : ''}">${own ? '' : '<span class="avatar" aria-hidden="true">案</span>'}<div class="message-body"><span class="speaker">${esc(m.speaker)}${m.problemId ? `<small>${esc(m.problemId)}</small>` : ''}</span><div class="bubble">${esc(m.text)}</div></div></article>`;
+}
+
+function answerFormMarkup(p) {
+  const label = `${p.id}の回答`;
+  if (p.type === 'text') {
+    return `<form id="answer-form"><label class="sr-only" for="answer">${esc(label)}</label><div class="text-composer"><input id="answer" name="answer" type="text" placeholder="${esc(p.placeholder)}" autocomplete="off" required><button type="submit" class="send-button" aria-label="答えを送信">${icon('send')}</button></div></form>`;
+  }
+  return `<form id="answer-form"><fieldset class="answer-options"><legend class="sr-only">${esc(label)}</legend>${p.options.map(o => `<label class="option"><input id="${o.id}" type="${p.type === 'single' ? 'radio' : 'checkbox'}" name="answer" value="${esc(o.id)}" ${p.type === 'single' ? 'required' : ''}><span>${esc(o.label)}</span></label>`).join('')}<button type="submit" class="primary-button">答えを送信${icon('send')}</button></fieldset></form>`;
 }
 
 function render({ scroll = false } = {}) {
   const p = current();
   const solved = state.solved.includes(p.id);
+  const composerVisible = solved || composerExpanded;
   const index = scenario.problems.indexOf(p);
   const branchPending = solved && p.branches && !state.branches[p.id];
   app.innerHTML = `<div class="shell">
     <main id="main" class="workspace">
-      <header class="topbar"><a class="brand" href="../works/november-kyusai/" aria-label="作品ページへ戻る"><span class="brand-mark" aria-hidden="true">11</span><span class="brand-title">${esc(scenario.title)}</span></a><button class="hint-button" data-action="hints" aria-label="ヒント">${icon('hint')}</button></header>
-      <div class="problem-switcher"><label for="problem-select" class="sr-only">問題</label><select id="problem-select">${scenario.problems.map(item => `<option value="${esc(item.id)}" ${item.id === p.id ? 'selected' : ''}>${esc(item.id)} · ${esc(item.title)}</option>`).join('')}</select></div>
+      <header class="topbar"><a class="brand" href="../works/november-kyusai/" aria-label="作品ページへ戻る"><span class="brand-mark" aria-hidden="true">11</span><span class="brand-title">${esc(scenario.title)}</span></a><button class="hint-button" data-action="hints" aria-label="ヒント">${icon('hint')}<span>ヒント</span></button></header>
+      <div class="problem-switcher"><details id="problem-disclosure" class="problem-disclosure" ${problemExpanded ? 'open' : ''}><summary><span class="problem-summary"><strong>${esc(p.id)}</strong><span>${esc(p.title)}</span></span>${icon('chevron')}</summary><div class="problem-content"><p>${esc(p.prompt)}</p><nav class="problem-nav" aria-label="問題を切り替える">${scenario.problems.map(item => `<button data-action="select" data-id="${esc(item.id)}" aria-pressed="${item.id === p.id}">${esc(item.id)}</button>`).join('')}</nav></div></details></div>
       <section class="chat-area" aria-label="謎解き会話">
-        <div class="chat-heading"><div><span class="eyebrow">${esc(p.chapter)} <span>／</span> ${esc(p.id)}</span><h1>${esc(p.title)}</h1></div><span class="connection"><i></i>案内人</span></div>
-        <div class="date-divider"><span>11月の救祭</span></div>
         <div id="messages" class="messages" role="log" aria-label="会話" aria-live="polite" aria-relevant="additions text">${state.messages.map(messageMarkup).join('')}</div>
         ${branchPending ? `<div class="branch-options" aria-label="会話の選択肢">${p.branches.map(b => `<button data-action="branch" data-id="${esc(b.id)}">${esc(b.label)}${icon('arrow')}</button>`).join('')}</div>` : ''}
         <div class="chapter-end ${solved ? '' : 'hidden'}"><span>${esc(p.instruction)}</span></div>
       </section>
-      <section class="composer-area" aria-label="回答入力">
+      <section class="composer-area" aria-label="回答入力" ${composerVisible ? '' : 'hidden'}>
+        ${solved ? '' : `<div class="answer-composer-heading"><span>回答欄</span><button class="composer-close" data-action="close-composer" aria-label="回答欄を閉じる">${icon('close')}</button></div>`}
 
-        ${solved ? `<div class="solved-composer"><span class="solved-label">${icon('check')}${esc(p.id)}は正解しました</span>${branchPending ? '<span class="muted">会話の選択肢を選んでください</span>' : index < scenario.problems.length - 1 ? `<button class="primary-button" data-action="next">次の問題へ${icon('arrow')}</button>` : '<button class="primary-button" data-action="history">会話を読み返す</button>'}</div>` : `<form id="answer-form"><div class="answer-label"><span class="question-tag">${esc(p.id)}</span>${p.type === 'text' ? `<label for="answer">${esc(p.prompt)}</label>` : `<span>${esc(p.prompt)}</span>`}</div>${p.type === 'text' ? `<div class="text-composer"><input id="answer" name="answer" type="text" placeholder="${esc(p.placeholder)}" autocomplete="off" required aria-describedby="answer-note"><button type="submit" class="send-button" aria-label="答えを送信">${icon('send')}</button></div>` : `<fieldset class="answer-options"><legend class="sr-only">${esc(p.prompt)}</legend>${p.options.map(o => `<label class="option"><input id="${o.id}" type="${p.type === 'single' ? 'radio' : 'checkbox'}" name="answer" value="${esc(o.id)}" ${p.type === 'single' ? 'required' : ''}><span>${esc(o.label)}</span></label>`).join('')}<button type="submit" class="primary-button">答えを送信${icon('send')}</button></fieldset>`}</form>`}
-        <div class="composer-meta"><span id="answer-note">${solved ? '会話はあとから読み返せます。' : p.type === 'text' ? 'Enter で送信できます。' : p.type === 'multiple' ? '当てはまるものをすべて選んでください。' : 'ひとつ選んでください。'}</span></div>
+        ${solved ? `<div class="solved-composer"><span class="solved-label">${icon('check')}${esc(p.id)}は正解しました</span>${branchPending ? '<span class="muted">会話の選択肢を選んでください</span>' : index < scenario.problems.length - 1 ? `<button class="primary-button" data-action="next">次の問題へ${icon('arrow')}</button>` : '<button class="primary-button" data-action="history">会話を読み返す</button>'}</div>` : answerFormMarkup(p)}
+        ${solved ? '<div class="composer-meta"><span>会話はあとから読み返せます。</span></div>' : p.type === 'text' ? '' : `<div class="composer-meta"><span>${p.type === 'multiple' ? '当てはまるものをすべて選んでください。' : 'ひとつ選んでください。'}</span></div>`}
         <div class="feedback" role="status">${esc(feedback || storageWarning)}</div>
       </section>
+      ${solved || composerExpanded ? '' : `<button class="answer-fab" data-action="open-composer" aria-label="回答欄を開く" aria-expanded="false">${icon('edit')}<span>回答</span></button>`}
       <nav class="bottom-nav" aria-label="メインメニュー"><button class="active" data-action="chat" aria-current="page">${icon('chat')}<span>トーク</span></button><button data-action="hints">${icon('hint')}<span>ヒント</span></button><button data-action="notebook">${icon('book')}<span>ノート${unlockedCards(scenario, state).length ? `<small class="nav-badge">${unlockedCards(scenario, state).length}</small>` : ''}</span></button><button data-action="history">${icon('history')}<span>履歴</span></button></nav>
     </main>
   </div>`;
@@ -94,12 +107,13 @@ function openPanel(kind, { keepFocus = false } = {}) {
 
 function selectProblem(id) {
   if (!scenario.problems.some(p => p.id === id)) return;
-  state = { ...state, selected: id }; feedback = ''; save(); render();
+  state = { ...state, selected: id }; composerExpanded = false; feedback = ''; save(); render();
 }
 
 function answer(value) {
   const result = submitAnswer(scenario, state, value);
   state = result.state;
+  if (result.status === 'correct') composerExpanded = false;
   feedback = result.status === 'empty' ? '答えを入力・選択してください。' : result.status === 'incorrect' ? 'もう一度、答えを送ってみましょう。' : '';
   save(); render({ scroll: true });
   if (!state.solved.includes(state.selected)) document.querySelector('#answer')?.focus();
@@ -111,6 +125,8 @@ document.addEventListener('click', event => {
   if (!button) return;
   const action = button.dataset.action;
   if (action === 'chat') { if (panel.open) panel.close(); }
+  else if (action === 'open-composer') { composerExpanded = true; render(); requestAnimationFrame(() => (document.querySelector('#answer') ?? document.querySelector('#answer-form input'))?.focus()); }
+  else if (action === 'close-composer') { composerExpanded = false; render(); document.querySelector('.answer-fab')?.focus(); }
   else if (action === 'select') selectProblem(button.dataset.id);
   else if (['hints', 'history', 'notebook', 'help', 'reset'].includes(action)) openPanel(action);
   else if (action === 'close') panel.close();
@@ -119,7 +135,9 @@ document.addEventListener('click', event => {
   else if (action === 'reveal-hint') { state.hints[state.selected] = Math.min((state.hints[state.selected] ?? 0) + 1, current().hints.length); save(); openPanel('hints', { keepFocus: true }); }
   else if (action === 'confirm-reset') { state = initialState(scenario); feedback = ''; save(); panel.close(); render(); }
 });
-document.addEventListener('change', event => { if (event.target.id === 'problem-select') selectProblem(event.target.value); });
+document.addEventListener('toggle', event => {
+  if (event.target.id === 'problem-disclosure' && event.target.isConnected) problemExpanded = event.target.open;
+}, true);
 document.addEventListener('submit', event => {
   if (event.target.id === 'answer-form') {
     event.preventDefault();
