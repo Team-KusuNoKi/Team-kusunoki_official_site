@@ -652,6 +652,38 @@ a.record:hover .record__arrow { transform: translate(4px, -4px); }
 .case__photo img { width: 100%; height: 100%; object-fit: cover; }
 .case:hover .case__photo { transform: rotate(-1deg) translateY(-6px); }
 
+.case--november { margin-top: clamp(64px, 9vw, 112px); }
+
+.case__photo--november {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #f3f0e7;
+  background: radial-gradient(circle at 68% 33%, #d5c7a4 0 10%, transparent 10.5%), linear-gradient(145deg, #52634b, #26352f 72%);
+}
+.case__photo--november strong {
+  font-family: var(--mincho);
+  font-size: clamp(5rem, 10vw, 8rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -.08em;
+}
+.november-mark__label,
+.november-mark__title { font-family: var(--sans); letter-spacing: .24em; }
+.november-mark__label { font-size: .58rem; }
+.november-mark__title { font-family: var(--mincho); font-size: .82rem; margin-top: 10px; }
+.case__photo--november i {
+  position: absolute;
+  width: 22px;
+  height: 34px;
+  right: 25%;
+  top: 27%;
+  border-radius: 90% 0 90% 0;
+  background: #c18b64;
+  transform: rotate(28deg);
+}
+
 /* 冊子の内側に引いた細い枠 */
 .case__photo::after {
   content: "";

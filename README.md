@@ -13,6 +13,11 @@ index.html                        トップ（1ページ完結）
   ├ #members   メンバー
   └ #contact   お問い合わせ
 works/kusunoki-ga-kareta-hi.html  作品詳細
+works/november-kyusai/            『11月の救祭』作品詳細
+  ├ index.html                     作品ページ
+  ├ site.css / favicon.svg         作品ページ用
+app/index.html                     謎解きアプリ
+app/assets/                        アプリの JavaScript / CSS / アイコン
 404.html                          存在しないページ
 css/style.css                     全ページ共通のスタイル
 js/main.js                        演出とページ内スクロール
@@ -35,11 +40,16 @@ python3 -m http.server 8000
 （`/works/kusunoki-ga-kareta-hi`）にしてあります。
 `python3 -m http.server` は拡張子の補完をしないため、ローカルではこのリンクだけ
 404 になります。ローカルで開くときは `.html` を付けてください。本番では 200 です。
+『11月の救祭』は `/works/november-kyusai/`、アプリは `/app/` です。
 
 ## 公開
 
 `main` ブランチへの push で Cloudflare Pages が自動的に配信します。
 ビルドコマンドはなく、リポジトリの中身がそのまま公開されます。
+
+『11月の救祭』アプリの元データは別の作業フォルダにあります。
+アプリを更新したときは、`app/assets/` のファイルを元データの `webapp/dist/` から反映してください。
+現在の `scenario.js` は動作確認用の仮データです。正式シナリオを入れるまでは公開しないでください。
 
 ### CSS / JS を変えたとき
 
