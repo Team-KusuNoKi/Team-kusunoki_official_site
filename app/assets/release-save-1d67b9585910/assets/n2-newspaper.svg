@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="530" height="500" viewBox="0 0 530 500">
+  <title>京都大学新聞11月号</title>
+  <desc>スローガンの西・北・百・正を強調。寄稿「門出」の本文は原本の改行を保つ。</desc>
+  <rect width="530" height="500" fill="white"/>
+  <g fill="#050505" font-family="'Hiragino Mincho ProN', 'Yu Mincho', serif">
+    <text x="265" y="42" font-family="'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif" font-size="32" font-weight="bold" text-anchor="middle">京都大学新聞11月号</text>
+    <text x="4" y="111" font-size="24">【今月のスローガン】</text>
+    <text x="25" y="144" font-size="24" textLength="480" lengthAdjust="spacingAndGlyphs"><tspan font-weight="bold" font-style="italic">西</tspan>から<tspan font-weight="bold" font-style="italic">北</tspan>へ。<tspan font-weight="bold" font-style="italic">百</tspan>年の歴史を<tspan font-weight="bold" font-style="italic">正</tspan>しい方向へ。</text>
+    <text x="25" y="174" font-size="24" textLength="380" lengthAdjust="spacingAndGlyphs">僕らで繋いで行く、新しい未来へ。</text>
+    <text x="4" y="235" font-size="24">【今月の寄稿】</text>
+    <text x="3" y="280" font-family="'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif"><tspan font-size="25">＜</tspan><tspan font-size="38" font-weight="bold">門</tspan><tspan font-size="25" font-weight="bold">出</tspan><tspan font-size="25">＞</tspan></text>
+    <g font-size="21">
+      <text x="4" y="316" textLength="515" lengthAdjust="spacingAndGlyphs">関西の街中を歩くと、古い商店街や店がすぐ見つか</text>
+      <text x="4" y="339" textLength="515" lengthAdjust="spacingAndGlyphs">る。地元の人に聞けば、店の由来を教えてくれ、百</text>
+      <text x="4" y="362" textLength="515" lengthAdjust="spacingAndGlyphs">歳の地図を見ながら古い街をゆっくりと歩くと、交</text>
+      <text x="4" y="385" textLength="515" lengthAdjust="spacingAndGlyphs">差点の真上には目印があり、通りごとの雰囲気の差</text>
+      <text x="4" y="408" textLength="515" lengthAdjust="spacingAndGlyphs">が分かる。北へ行くと小さな公園があり、十点満点</text>
+      <text x="4" y="431" textLength="515" lengthAdjust="spacingAndGlyphs">の景色を眺めつつ歩くと、僕の愛する町の魅力を正</text>
+      <text x="4" y="454" textLength="210" lengthAdjust="spacingAndGlyphs">しく感じられる。</text>
+    </g>
+    <text x="519" y="490" font-size="22" text-anchor="end">文責：京都大学研究会</text>
+  </g>
+</svg>
