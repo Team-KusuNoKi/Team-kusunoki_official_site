@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="545" height="380" viewBox="7 230 545 380">
+  <title>N6の図</title>
+  <desc>左に縦に並ぶ5つの空欄と細い仕切り。右に左端が丸い9つの札。黄色は「か・の・も」、紫色は「せ・お・べ」、桃色は「は・す・し」。原本の色と文字の位置を保持。</desc>
+  <rect x="7" y="230" width="545" height="380" fill="white"/>
+  <g fill="white" stroke="#303b50" stroke-width="1">
+    <rect x="15" y="274" width="88" height="33"/>
+    <rect x="15" y="334" width="88" height="33"/>
+    <rect x="15" y="394" width="88" height="33"/>
+    <rect x="15" y="453" width="88" height="33"/>
+    <rect x="15" y="515" width="88" height="33"/>
+    <rect x="123" y="242" width="7" height="346"/>
+  </g>
+  <path d="M180.0 242H229V319H180.0A49.0 38.5 0 0 1 180.0 242Z" fill="#bf9000" stroke="#303b50" stroke-width="1"/>
+  <text x="186.0" y="282.5" text-anchor="middle" dominant-baseline="central" font-family="'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif" font-weight="bold" font-size="48" fill="#050505">か</text>
+  <path d="M378.0 240H431V324H378.0A53.0 42.0 0 0 1 378.0 240Z" fill="#6600ff" stroke="#303b50" stroke-width="1"/>
+  <text x="384.0" y="284.0" text-anchor="middle" dominant-baseline="central" font-family="'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif" font-weight="bold" font-size="48" fill="#050505">せ</text>
+  <path d="M491.5 244H540V320H491.5A48.5 38.0 0 0 1 491.5 244Z" fill="#bf9000" stroke="#303b50" stroke-width="1"/>
+  <text x="497.5" y="284.0" text-anchor="middle" dominant-baseline="central" font-family="'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif" font-weight="bold" font-size="48" fill="#050505">の</text>
+  <path d="M180.0 337H229V413H180.0A49.0 38.0 0 0 1 180.0 337Z" fill="#f42bd5" stroke="#303b50" stroke-width="1"/>
+  <text x="186.0" y="377.0" text-anchor="middle" dominant-baseline="central" font-family="'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif" font-weight="bold" font-size="48" fill="#050505">は</text>
+  <path d="M374.0 337H423V413H374.0A49.0 38.0 0 0 1 374.0 337Z" fill="#f42bd5" stroke="#303b50" stroke-width="1"/>
+  <text x="380.0" y="377.0" text-anchor="middle" dominant-baseline="central" font-family="'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif" font-weight="bold" font-size="48" fill="#050505">す</text>
+  <path d="M328.0 426H381V509H328.0A53.0 41.5 0 0 1 328.0 426Z" fill="#6600ff" stroke="#303b50" stroke-width="1"/>
+  <text x="334.0" y="469.5" text-anchor="middle" dominant-baseline="central" font-family="'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif" font-weight="bold" font-size="48" fill="#050505">お</text>
+  <path d="M488.0 430H537V507H488.0A49.0 38.5 0 0 1 488.0 430Z" fill="#bf9000" stroke="#303b50" stroke-width="1"/>
+  <text x="494.0" y="470.5" text-anchor="middle" dominant-baseline="central" font-family="'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif" font-weight="bold" font-size="48" fill="#050505">も</text>
+  <path d="M209.5 508H258V585H209.5A48.5 38.5 0 0 1 209.5 508Z" fill="#6600ff" stroke="#303b50" stroke-width="1"/>
+  <text x="215.5" y="548.5" text-anchor="middle" dominant-baseline="central" font-family="'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif" font-weight="bold" font-size="48" fill="#050505">べ</text>
+  <path d="M421.0 519H470V596H421.0A49.0 38.5 0 0 1 421.0 519Z" fill="#f42bd5" stroke="#303b50" stroke-width="1"/>
+  <text x="427.0" y="559.5" text-anchor="middle" dominant-baseline="central" font-family="'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif" font-weight="bold" font-size="48" fill="#050505">し</text>
+</svg>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="559" height="400" viewBox="0 0 559 400">
+  <title>N3の図</title>
+  <desc>大、空欄、中、小、？の順に小さくなる5つの巻物。下には、ひもに結ばれた小さい空欄の札と大きい「大」の札。</desc>
+  <rect width="559" height="400" fill="white"/>
+  <defs>
+    <g id="scroll" fill="white" stroke="#111" stroke-width="1.2">
+      <path d="M18 149V10Q18 1 28 1H125V149Z"/>
+      <path d="M125 1c20 0 18 19 6 18h-7c-4-6-1-11 4-11m-3 141H9c-15 0-15 18 0 18h106c15 0 19-18 10-18-8 0-11 10-3 10h8"/>
+    </g>
+  </defs>
+  <use href="#scroll" transform="translate(10 10) scale(1 .94)"/>
+  <use href="#scroll" transform="translate(151 29) scale(.86 .826)"/>
+  <use href="#scroll" transform="translate(279 48) scale(.74 .713)"/>
+  <use href="#scroll" transform="translate(386 73) scale(.57 .563)"/>
+  <use href="#scroll" transform="translate(477 98) scale(.43 .413)"/>
+  <g fill="#050505" font-family="'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif" text-anchor="middle" dominant-baseline="central">
+    <text x="80" y="87" font-size="61" font-weight="bold">大</text>
+    <text x="333" y="105" font-size="46" font-weight="bold">中</text>
+    <text x="426" y="124" font-size="34">小</text>
+    <circle cx="508" cy="131" r="16"/>
+    <text x="508" y="132" fill="white" font-size="28" font-weight="bold">?</text>
+  </g>
+  <path d="M0 251H559" stroke="#050505" stroke-width="4"/>
+  <g fill="#ccc" stroke="#606b80" stroke-width="1.5">
+    <path d="m73 285 60-46 30 29-75 39zM165 239l65 56-16 16-63-45z"/>
+    <path d="m255 306 101-75 43 45-117 65zM398 240l118 67-17 41-102-62z"/>
+    <path d="M132 221h40v56h-40zM354 201h66v90h-66z"/>
+  </g>
+  <text x="387" y="263" fill="#050505" font-family="'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif" font-size="61" font-weight="bold" text-anchor="middle">大</text>
+  <path d="M0 219h27v173H0zM535 219h24v173h-24z" fill="#050505"/>
+</svg>
