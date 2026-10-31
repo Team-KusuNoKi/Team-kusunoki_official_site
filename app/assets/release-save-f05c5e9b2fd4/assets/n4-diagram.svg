@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="559" height="610" viewBox="0 0 559 610">
+  <title>N4の図</title>
+  <desc>上から見た図への変換例と北の方位記号。下に6列4行の格子、黒い線、2つの×、向きの異なる1から5の数字。</desc>
+  <rect width="559" height="610" fill="white"/>
+  <g fill="#aaa" stroke="#303b50" stroke-width="1">
+    <path d="M10 120h55v29H10zM163 111h30v43h-30zM212 116h62v32h-62z"/>
+  </g>
+  <g stroke="#050505" stroke-width="2"><path d="M23 149v23m26-23v23m117-18v21m25-21v21m36-27v26m34-26v26"/></g>
+  <path d="M72 72h74v110H72z" fill="none" stroke="#303b50" stroke-width="1" stroke-dasharray="3 5"/>
+  <g fill="#050505"><path d="M78 88h31v22H78zM109 114h32v33h-32z"/><path d="M108 83v85" stroke="#303b50" stroke-width="1"/></g>
+  <path d="M85 19v45" stroke="#050505" stroke-width="2"/><path d="m81 59 4 8 4-8z" fill="#050505"/>
+  <g fill="none" stroke="#050505" stroke-width="3"><path d="M96 45q16-20 32 0-16 20-32 0z"/><circle cx="112" cy="45" r="7"/></g><circle cx="112" cy="45" r="3" fill="#050505"/>
+  <path d="M298 96h32V82l27 27-27 27v-14h-32z" fill="#050505"/>
+  <path d="M445 71v99M344 170h201" stroke="#050505" stroke-width="18"/>
+  <g fill="none" stroke="#050505" stroke-width="3"><path d="m518 36-13 25h26M518 36v65M497 78h41"/></g>
+  <text x="518" y="28" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#050505">N</text>
+  <g fill="none" stroke="#050505" stroke-width="1.4">
+    <path d="M15 241h529v353H15zM103.17 241v353M191.33 241v353M279.5 241v353M367.67 241v353M455.83 241v353M15 329.25h529M15 417.5h529M15 505.75h529"/>
+  </g>
+  <path d="M104 340h86M104 506h86" stroke="#050505" stroke-width="21"/>
+  <path d="m29 410 15 15m0-15-15 15m34-15 15 15m0-15-15 15" stroke="#050505" stroke-width="8"/>
+  <g fill="#aaa" stroke="#303b50" stroke-width="1">
+    <circle cx="445" cy="170" r="15"/><circle cx="279.5" cy="329.25" r="15"/>
+    <circle cx="103.17" cy="417.5" r="15"/><circle cx="191.33" cy="417.5" r="15"/>
+    <circle cx="367.67" cy="417.5" r="15"/><circle cx="455.83" cy="417.5" r="15"/>
+  </g>
+  <g fill="#050505" font-family="Arial, sans-serif" font-size="22" text-anchor="middle" dominant-baseline="central">
+    <text x="445" y="170">1</text><text x="279.5" y="329.25">5</text><text x="103.17" y="417.5">3</text>
+    <text x="191.33" y="417.5" transform="rotate(-90 191.33 417.5)">1</text>
+    <text x="367.67" y="417.5">4</text><text x="455.83" y="417.5" transform="rotate(180 455.83 417.5)">2</text>
+  </g>
+</svg>
