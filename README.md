@@ -16,8 +16,10 @@ works/kusunoki-ga-kareta-hi.html  作品詳細
 works/november-kyusai/            『11月の救祭』作品詳細
   ├ index.html                     作品ページ
   ├ site.css / favicon.svg         作品ページ用
-app/index.html                     謎解きアプリ
-app/assets/                        アプリの JavaScript / CSS / アイコン
+11月の救祭/app/index.html          謎解きアプリ
+11月の救祭/app/assets/             アプリの JavaScript / CSS / アイコン
+app/assets/                        旧URLで開いているタブ向けの互換用資材
+_redirects                         /app/ から新URLへの301転送
 404.html                          存在しないページ
 css/style.css                     全ページ共通のスタイル
 js/main.js                        演出とページ内スクロール
@@ -40,7 +42,7 @@ python3 -m http.server 8000
 （`/works/kusunoki-ga-kareta-hi`）にしてあります。
 `python3 -m http.server` は拡張子の補完をしないため、ローカルではこのリンクだけ
 404 になります。ローカルで開くときは `.html` を付けてください。本番では 200 です。
-『11月の救祭』は `/works/november-kyusai/`、アプリは `/app/` です。
+『11月の救祭』は `/works/november-kyusai/`、アプリは `/11月の救祭/app/` です。旧 `/app`・`/app/`・`/app/index`・`/app/index.html` は新URLへ301転送します。
 
 ## 公開
 
@@ -48,9 +50,9 @@ python3 -m http.server 8000
 ビルドコマンドはなく、リポジトリの中身がそのまま公開されます。
 
 『11月の救祭』アプリの元データは別の作業フォルダにあります。
-アプリを更新したときは、`app/assets/` のファイルを元データの `webapp/dist/` から反映してください。
+アプリを更新したときは、`11月の救祭/app/assets/` のファイルを元データの `webapp/dist/` から反映してください。
 問題・会話は N1〜N4.5.1 まで反映しています。考察カードは動作確認用データです。
-アプリの配信ファイルは `app/assets/release-日付-ハッシュ/` にまとめ、`app/index.html` から読み込みます。
+アプリの配信ファイルは `11月の救祭/app/assets/release-日付-ハッシュ/` にまとめ、`11月の救祭/app/index.html` から読み込みます。
 JavaScript の相対 import、CSS の背景画像、問題画像・人物画像の参照を配信先に合わせて反映してください。
 
 ### CSS / JS を変えたとき
@@ -85,3 +87,5 @@ sed -i '' 's/?v=[0-9]\{8\}/?v=20260901/g' *.html works/*.html
 `images/logo.png` は円の外側を透明にした表示用のロゴ。ヘッダー・フッター・
 ローディング・ファビコンで使っています。`images/logo.jpg` は OGP 用の正方形版です。
 どちらも `logo.jpg`（原本）から中心をそろえて書き出しています。
+
+2026-11-02: アプリURLを `https://team-kusunoki.com/11月の救祭/app/` に変更しました。日本語のパスは通信時にUTF-8でパーセントエンコードされます。保存APIは同一オリジンの `/api/play-saves`、作品ID・localStorageキー・D1・Secretは従来どおりです。既存の進行データを継続して使用できます。今後の公開でもこのパスを維持し、既存の `_redirects` がある場合は統合してください。
