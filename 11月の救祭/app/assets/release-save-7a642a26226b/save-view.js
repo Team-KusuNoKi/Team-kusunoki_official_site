@@ -1,0 +1,82 @@
+// 保存した画面を、現在のシナリオで表示できる範囲に戻す。
+import { restoreProblemId } from './engine.js';
+
+export function restorePlayView(scenario, state, raw, sourceRevision = state.scenarioRevision ?? 0) {
+  const p = scenario.problems.find(item => item.id === state.selected) ?? scenario.problems[0];
+  const number = (value, max) => Number.isFinite(value) ? Math.max(0, Math.min(max, Math.floor(value))) : 0;
+  const validMessage = m => m && typeof m.text === 'string' && m.text.length <= 32768
+    && typeof m.speaker === 'string' && ['dialogue', 'answer', 'error', 'success'].includes(m.kind)
+    && (!m.problemId || scenario.problems.some(item => item.id === m.problemId));
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) {
+    const messages = state.messages.filter(m => m.problemId === p.id && !['answer', 'success', 'error'].includes(m.kind));
+    return { startView: !state.solved.length && p.id === scenario.problems[0].id,
+      yoiEndView: false, investigationView: false,
+      repeatAnswer: false, composerExpanded: !state.solved.includes(p.id) && !(!state.solved.length && p.id === scenario.problems[0].id), sceneStart: state.messages.length,
+      displayedMessages: messages, isPlaying: false, investigationScrollTop: 0, investigationReturnId: null,
+      puzzleImageIndex: 0, chatScrollTop: 0, selectedPuzzleAnswer: '', selectedSymbols: [], answerDrafts: {} };
+  }
+  const investigationView = Boolean(raw.investigationView) && scenario.investigation.problemIds.includes(p.id);
+  const resumeMigratedDialogue = !raw.repeatAnswer && state.solved.includes(p.id)
+    && (scenario.progressMigrations ?? []).some(m => sourceRevision < m.revision && m.completeDialogue?.includes(p.id))
+    && !raw.displayedMessages?.some?.(m => m?.problemId && restoreProblemId(scenario, m.problemId, sourceRevision) === p.id);
+  const firstDialogue = state.messages.findIndex(m => m.problemId === p.id && m.kind === 'dialogue');
+  const resumeDialogue = resumeMigratedDialogue && firstDialogue >= 0;
+  const sceneStart = resumeDialogue ? firstDialogue : number(raw.sceneStart, state.messages.length);
+  const scene = state.messages.slice(sceneStart).filter(m => m.problemId === p.id && !['answer', 'success', 'error'].includes(m.kind));
+  const displayedMessages = resumeDialogue || p.conversationBackground === 'empty' ? [] : Array.isArray(raw.displayedMessages)
+    ? raw.displayedMessages.filter(m => !m?.problemId || restoreProblemId(scenario, m.problemId, sourceRevision)).map(m => m && m.problemId ? { ...m, problemId: restoreProblemId(scenario, m.problemId, sourceRevision) } : m).filter(validMessage).filter(m => !m.problemId || scenario.problems.find(item => item.id === m.problemId)?.chapter === p.chapter).slice(0, 2000) : [];
+  const answerDrafts = restoreAnswerDrafts(scenario, raw.answerDrafts, sourceRevision);
+  return {
+    answerDrafts,
+    startView: Boolean(raw.startView) && p.id === scenario.problems[0].id,
+    yoiEndView: Boolean(raw.yoiEndView) && p.completionScreen === 'yoi' && state.solved.includes(p.id),
+    investigationView, repeatAnswer: Boolean(raw.repeatAnswer) && state.solved.includes(p.id),
+    composerExpanded: Boolean(raw.composerExpanded) && !investigationView && !resumeDialogue,
+    sceneStart, displayedMessages, isPlaying: (resumeDialogue || Boolean(raw.isPlaying)) && scene.length > 0 && !investigationView,
+    investigationScrollTop: number(raw.investigationScrollTop, 1000000),
+    investigationReturnId: scenario.investigation.problemIds.includes(raw.investigationReturnId) ? raw.investigationReturnId : null,
+    puzzleImageIndex: number(raw.puzzleImageIndex, Math.max(0, (p.images?.length ?? 1) - 1)),
+    chatScrollTop: number(raw.chatScrollTop, 1000000),
+    selectedPuzzleAnswer: p.id === 'N1' && answerDrafts.N1 ? answerDrafts.N1[0] : p.options?.some(item => item.id === raw.selectedPuzzleAnswer) ? raw.selectedPuzzleAnswer : '',
+    selectedSymbols: Array.from({ length: p.answerSlots ?? 0 }, (_, i) => p.symbolChoices?.includes(answerDrafts[p.id]?.[i] ?? raw.selectedSymbols?.[i]) ? (answerDrafts[p.id]?.[i] ?? raw.selectedSymbols[i]) : ''),
+  };
+}
+
+export function pendingConversation(state, view) {
+  if (!view.isPlaying) return [];
+  const scene = state.messages.slice(view.sceneStart).filter(m => m.problemId === state.selected && !['answer', 'success', 'error'].includes(m.kind));
+  // 表示済みの件数を超えて、次の会話へ飛ばさない。
+  let shown = 0;
+  while (shown < view.displayedMessages.length && shown < scene.length
+    && scene[shown].text === view.displayedMessages[shown].text && scene[shown].speaker === view.displayedMessages[shown].speaker) shown++;
+  return scene.slice(shown);
+}
+
+// Keep unfinished answers separate from solved progress and validate against current controls.
+export function sanitizeAnswerDraft(problem, raw) {
+  if (!Array.isArray(raw)) return [];
+  const text = value => typeof value === 'string' ? value.slice(0, 256) : '';
+  const choice = (value, options) => options?.some(option => (typeof option === 'string' ? option : option.id) === value) ? value : '';
+  if (problem.answerSlots) return Array.from({ length: problem.answerSlots }, (_, index) => choice(raw[index], problem.symbolChoices));
+  if (problem.type === 'fields') return problem.fields.map((field, index) => {
+    // Q7の記号欄を文字入力からプルダウンへ変更したため、旧下書きの英字も引き継ぐ。
+    const value = problem.id === 'Q7' && index === 0 ? text(raw[index]).normalize('NFKC').trim().toUpperCase() : raw[index];
+    return field.answerChoices || field.options ? choice(value, field.answerChoices ?? field.options) : text(value);
+  });
+  if (problem.type === 'multiple') return [...new Set(raw.slice(0, problem.options.length).map(value => choice(value, problem.options)).filter(Boolean))];
+  if (problem.answerChoices || problem.answerControl === 'select' || problem.type === 'single') return [choice(raw[0], problem.answerChoices ?? problem.options)];
+  return problem.type === 'text' ? [text(raw[0])] : [];
+}
+
+export function restoreAnswerDrafts(scenario, raw, sourceRevision = 0) {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return {};
+  const drafts = {};
+  for (const [oldId, values] of Object.entries(raw).slice(0, 100)) {
+    const id = restoreProblemId(scenario, oldId, sourceRevision);
+    const problem = scenario.problems.find(item => item.id === id);
+    if (!problem) continue;
+    const draft = sanitizeAnswerDraft(problem, values);
+    if (draft.some(Boolean)) drafts[id] = draft;
+  }
+  return drafts;
+}
