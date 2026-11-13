@@ -47,7 +47,7 @@
 <link rel="icon" href="/images/logo-v2.png" media="(prefers-color-scheme: light)">
 <link rel="icon" href="/images/logo-dark-v2.png" media="(prefers-color-scheme: dark)">
 <link rel="apple-touch-icon" href="/images/logo-v2.png">
-<link rel="stylesheet" href="/css/style.css?v=20261114b">
+<link rel="stylesheet" href="/css/style.css?v=20261114c">
 <!-- JSが動く環境でだけ演出を有効にする（表示前に判定してちらつきを防ぐ） -->
 <script>document.documentElement.className += ' js';</script>
 </head>
@@ -80,6 +80,7 @@
 
     <div class="wrap hero__inner" data-stagger="140">
       <p class="hero__eyebrow" data-reveal="up"><span class="tick"></span>京都発・物語のある謎解き</p>
+      <h1 class="hero__heading" data-reveal="up">Team.KusuNoKiとは</h1>
 
       <p class="hero__desc" data-reveal="up">
         京都大学の学生を中心とした謎解き制作団体です。11月祭（NF）での出展を中心に活動しております。<br>
@@ -88,70 +89,22 @@
 
       <div class="btn-row hero__actions" data-reveal="up">
         <a class="btn btn--light" href="/works/november-kyusai/">作品を見る</a>
+        <a class="btn btn--ghost" href="/contact/">お問い合わせ</a>
       </div>
     </div>
-  </section>
 
-  <!-- ABOUT（概要） -->
-  <section class="sheet sheet--ink" id="about">
-    <div class="wrap">
-      <h2 class="about-title" data-reveal="up">Team.KusuNoKiとは</h2>
-
-      <p class="about-statement" data-reveal="up">
-        京都大学の学生が集まって、<br><span class="em">謎解き</span>をつくっています。
-      </p>
-
-      <div class="about-lead" data-stagger="70">
-        <div data-reveal="up">
-          <h3>なりたち</h3>
-          <p>
-            Team.KusuNoKi は、謎解きが好きな京都大学の学生が集まってできた制作チームです。
-            2025年から活動していて、いまのメンバーは6人です。
-            企画、謎制作、デザイン、Web など、
-            それぞれの得意分野を持ち寄って作品をつくっています。
-          </p>
-        </div>
+    <!-- 作品紹介エリア。中身は後で入れるので、今は枠だけ -->
+    <div class="hero__works" aria-hidden="true">
+      <p class="hero__works-label">WORKS</p>
+      <div class="hero__works-slots">
+        <span></span><span></span><span></span>
       </div>
-
-      <dl class="facts" data-stagger="90">
-        <div data-reveal="up"><dt>FOUNDED</dt><dd>2025</dd></div>
-        <div data-reveal="up"><dt>MEMBERS</dt><dd>6<small>人</small></dd></div>
-        <div data-reveal="up"><dt>WORKS</dt><dd>2<small>作品</small></dd></div>
-      </dl>
-
-      <ul class="points" data-stagger="110">
-        <li data-reveal="up">
-          <p class="label">01 / STORY</p>
-          <h3>物語を読む</h3>
-          <p>ひとつの物語を軸に謎を組み立てます。解くほどに、登場人物と景色の見え方が変わっていきます。</p>
-        </li>
-        <li data-reveal="up">
-          <p class="label">02 / MYSTERY</p>
-          <h3>ひらめきで解く</h3>
-          <p>冊子・Web・現地の掲示を行き来しながら、手がかりをつなげて答えにたどり着きます。</p>
-        </li>
-        <li data-reveal="up">
-          <p class="label">03 / PLACE</p>
-          <h3>キャンパスを歩く</h3>
-          <p>京都大学のキャンパスそのものが舞台です。歩いて、探して、物語の中に入っていきます。</p>
-        </li>
-      </ul>
-    </div>
-
-    <div class="wrap" style="margin-top:96px;">
-      <div class="marquee" aria-hidden="true">
-        <div class="marquee__inner">
-          <span>STORY &times; MYSTERY &times; PLACE —&nbsp;</span>
-          <span>STORY &times; MYSTERY &times; PLACE —&nbsp;</span>
-          <span>STORY &times; MYSTERY &times; PLACE —&nbsp;</span>
-          <span>STORY &times; MYSTERY &times; PLACE —&nbsp;</span>
-        </div>
-      </div>
+      <p class="hero__works-note">冊子と Web の謎解き</p>
     </div>
   </section>
 
 </main>
 
-<script src="/js/main.js?v=20261114b"></script>
+<script src="/js/main.js?v=20261114c"></script>
 </body>
 </html>

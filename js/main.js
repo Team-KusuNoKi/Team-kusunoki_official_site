@@ -176,8 +176,6 @@
     if (reduceMotion || !finePointer) return;
 
     var glow = document.querySelector('.glow');
-    var photo = document.querySelector('.hero__photo');
-    var hero = document.querySelector('.hero');
     var lifts = document.querySelectorAll('.lift');
 
     var px = 0, py = 0, ticking = false;
@@ -186,17 +184,6 @@
       if (glow) {
         glow.style.setProperty('--gx', px + 'px');
         glow.style.setProperty('--gy', py + 'px');
-      }
-
-      // ヒーローの写真は、画面中央からのずれに応じてゆっくり逆方向へ動かす
-      if (photo && hero) {
-        var r = hero.getBoundingClientRect();
-        if (r.bottom > 0) {
-          var dx = (px - window.innerWidth / 2) / window.innerWidth;
-          var dy = (py - window.innerHeight / 2) / window.innerHeight;
-          photo.style.setProperty('--mx', (dx * -26).toFixed(1) + 'px');
-          photo.style.setProperty('--my', (dy * -20).toFixed(1) + 'px');
-        }
       }
 
       ticking = false;
