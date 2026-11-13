@@ -269,6 +269,66 @@
   })();
 
   /* -------------------------------------------------------
+     トップのキービジュアル。バーが伸びきったら次の作品へ
+     ------------------------------------------------------- */
+  (function keyVisual() {
+    var kv = document.querySelector('.kv');
+    if (!kv) return;
+    var slides = [].slice.call(kv.querySelectorAll('.kv__slide'));
+    var tabs = [].slice.call(kv.querySelectorAll('.kv__pager button'));
+    var current = 0;
+
+    function show(i) {
+      current = (i + slides.length) % slides.length;
+      slides.forEach(function (slide, n) {
+        var on = n === current;
+        slide.classList.toggle('is-active', on);
+        slide.setAttribute('aria-hidden', String(!on));
+        slide.querySelectorAll('a').forEach(function (a) { a.tabIndex = on ? 0 : -1; });
+      });
+      tabs.forEach(function (tab, n) { tab.setAttribute('aria-selected', String(n === current)); });
+    }
+
+    tabs.forEach(function (tab, n) {
+      tab.addEventListener('click', function () { show(n); });
+      var bar = tab.querySelector('.kv__bar i');
+      if (bar) bar.addEventListener('animationend', function () { show(current + 1); });
+    });
+
+    // キーボードで操作している間は止める
+    kv.addEventListener('focusin', function () { kv.classList.add('is-paused'); });
+    kv.addEventListener('focusout', function () { kv.classList.remove('is-paused'); });
+
+    show(0);
+  })();
+
+  /* -------------------------------------------------------
+     作品カードの上でカーソルに付いてくるラベル
+     ------------------------------------------------------- */
+  (function cursorLabel() {
+    var targets = document.querySelectorAll('[data-cursor]');
+    if (!targets.length || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+    var label = document.createElement('div');
+    label.className = 'cursor-view';
+    label.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(label);
+
+    window.addEventListener('mousemove', function (e) {
+      label.style.setProperty('--x', e.clientX + 'px');
+      label.style.setProperty('--y', e.clientY + 'px');
+    }, { passive: true });
+
+    targets.forEach(function (el) {
+      el.addEventListener('mouseenter', function () {
+        label.textContent = el.getAttribute('data-cursor');
+        label.classList.add('is-on');
+      });
+      el.addEventListener('mouseleave', function () { label.classList.remove('is-on'); });
+    });
+  })();
+
+  /* -------------------------------------------------------
      スクロールに連動する値の更新
      ------------------------------------------------------- */
   (function scrollEffects() {
