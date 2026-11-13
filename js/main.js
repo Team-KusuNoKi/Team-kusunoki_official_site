@@ -255,10 +255,11 @@
       if (photo) photo.style.setProperty('--photo-shift', (y * 0.14) + 'px');
 
       // スクロールするほど空が夜へ沈む（下部のオレンジの霞が暗くなる）。
-      // ヒーローは画面高ちょうどなので、1.4画面分のスクロールで完了させる
+      // ページ全体のスクロール量に連動させ、いちばん下まで行くと夜になる
       var duskEl = document.querySelector('.hero__photo--night');
       if (duskEl) {
-        var p = Math.min(Math.max(y / (window.innerHeight * 1.4), 0), 1);
+        var maxScroll = root.scrollHeight - window.innerHeight;
+        var p = maxScroll > 0 ? Math.min(Math.max(y / maxScroll, 0), 1) : 0;
         duskEl.style.setProperty('--dusk', (p * p * (3 - 2 * p)).toFixed(3));
       }
 
