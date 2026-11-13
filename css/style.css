@@ -1572,14 +1572,17 @@ body::after {
 .contact {
   min-height: 100svh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 34px;
   background: var(--ink);
   color: var(--on-ink);
   padding: calc(var(--header-h) + 40px) var(--gutter) 60px;
 }
 .contact .btn-row { justify-content: center; }
 .contact .btn { min-width: 280px; }
+.contact__sns { justify-content: center; }
 .contact__soon {
   margin: 0;
   font-family: var(--mincho);
@@ -2034,7 +2037,11 @@ a.record { color: inherit; }
   flex: none;
   margin: 0;
   padding: 4px var(--gutter) 0;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  flex-wrap: wrap;
 }
 .works-index__home {
   display: inline-block;
@@ -2098,14 +2105,12 @@ a.record { color: inherit; }
 
 @media (max-width: 860px) {
   .nav-toggle { display: block; }
-  /* モバイルでもページリンクは残す。文字を詰めて SNS と両立させる */
+  /* モバイルのヘッダーはページリンクをブランド横に左詰め。SNSは画面下部へ */
   .header-nav { display: flex; gap: 16px; }
   .header-nav a { font-size: 0.78rem; letter-spacing: 0.08em; }
-  .header-tools { gap: 14px; }
-  .sns-links { gap: 8px; }
-  .sns-links a { width: 34px; height: 34px; }
-  .sns-links svg { width: 15px; height: 15px; }
-  .site-header__inner { gap: 14px; }
+  .site-header__inner { justify-content: flex-start; gap: 24px; }
+  .header-tools { margin-left: 0; gap: 16px; }
+  .site-header .sns-links { display: none; }
 
   .global-nav {
     position: fixed;
@@ -2174,30 +2179,13 @@ a.record { color: inherit; }
     align-items: center;
   }
   .js .hero__actions[data-reveal] { opacity: 1; transform: none; }
-  .hero__actions .btn {
-    flex: 0 0 auto;
-    width: auto;
-    min-width: 0;
-    gap: 0;
-    padding: 12px 2px;
-    background: transparent;
-    border: 0;
-    color: var(--on-ink);
-    font-family: var(--mincho);
-    font-size: 0.78rem;
-    font-weight: 400;
-    letter-spacing: 0.14em;
-    line-height: 1.4;
-    white-space: nowrap;
+  .hero__actions .sns-links { gap: 18px; }
+  .hero__actions .sns-links a {
+    width: 46px; height: 46px;
+    border-color: rgba(238, 234, 226, 0.28);
+    opacity: 1;
   }
-  .hero__actions .btn::after { content: none; }
-  @media (hover: hover) {
-    .hero__actions .btn:hover {
-      background: transparent;
-      border: 0;
-      color: var(--accent);
-    }
-  }
+  .hero__actions .sns-links svg { width: 19px; height: 19px; }
   .hero__foot-meta span + span { display: none; }
 
   .global-nav .nav-cta a { border: 0; padding: 18px var(--gutter); }
@@ -2218,9 +2206,8 @@ a.record { color: inherit; }
 @media (max-width: 620px) {
   :root { --gutter: 22px; }
 
-  /* ロゴはマークだけにして、ナビ2件とSNSが収まる幅を確保する */
+  /* ロゴはマークだけにして、ナビが収まる幅を確保する */
   .site-header .brand__name { display: none; }
-  .site-header .brand { gap: 0; }
 
   .sheet { padding: 72px 0; }
   .index-no { font-size: 1.8rem; }
@@ -2485,7 +2472,15 @@ body.sales-page {
 }
 
 .play-dialog {
+  /* UA既定のabsoluteはドキュメント基準でずれる環境があるため、
+     ビューポート基準のfixedで中央に固定する */
+  position: fixed;
+  inset: 0;
+  margin: auto;
   width: min(440px, calc(100vw - 32px));
+  max-height: calc(100svh - 48px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 28px 28px 22px;
   border: 0;
   border-radius: 8px;
@@ -2564,6 +2559,16 @@ body.sales-page {
   gap: 16px;
 }
 .sales-foot .copyright { color: var(--on-paper-dim); }
+.sales-foot .sns-links a {
+  border-color: rgba(28, 27, 25, 0.22);
+  color: var(--on-paper);
+}
+@media (hover: hover) {
+  .sales-foot .sns-links a:hover {
+    background: rgba(28, 27, 25, 0.06);
+    border-color: var(--on-paper-dim);
+  }
+}
 .sales-foot .footer-nav a { color: var(--on-paper-dim); }
 @media (hover: hover) {
   .sales-foot .footer-nav a:hover { color: var(--on-paper); }
