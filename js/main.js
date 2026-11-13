@@ -29,6 +29,18 @@
   })();
 
   /* -------------------------------------------------------
+     画像は読み込みが終わってからふわっと出す
+     ------------------------------------------------------- */
+  (function imageFade() {
+    document.querySelectorAll('img').forEach(function (img) {
+      function done() { img.classList.add('is-loaded'); }
+      if (img.complete && img.naturalWidth > 0) { done(); return; }
+      img.addEventListener('load', done, { once: true });
+      img.addEventListener('error', done, { once: true });
+    });
+  })();
+
+  /* -------------------------------------------------------
      モバイル用のナビゲーション開閉
      ------------------------------------------------------- */
   (function navToggle() {
