@@ -47,7 +47,7 @@
 <link rel="icon" href="/images/logo-v2.png" media="(prefers-color-scheme: light)">
 <link rel="icon" href="/images/logo-dark-v2.png" media="(prefers-color-scheme: dark)">
 <link rel="apple-touch-icon" href="/images/logo-v2.png">
-<link rel="stylesheet" href="/css/style.css?v=20261114k">
+<link rel="stylesheet" href="/css/style.css?v=20261114r">
 <!-- JSが動く環境でだけ演出を有効にする（表示前に判定してちらつきを防ぐ） -->
 <script>document.documentElement.className += ' js';</script>
 </head>
@@ -61,7 +61,7 @@
 <!-- マウスに追従するぼんやりした光 -->
 <div class="glow" aria-hidden="true"></div>
 
-<!-- ロゴだけの最小ヘッダー -->
+<!-- ロゴと、作品一覧・お問い合わせ -->
 <header class="site-header">
   <div class="site-header__inner">
     <a class="brand" href="/">
@@ -69,14 +69,20 @@
       <span class="brand__name">Team.KusuNoKi</span>
     </a>
 
-    <nav class="sns-links" aria-label="SNS">
-      <a href="https://x.com/teamkusunoki" target="_blank" rel="noopener" aria-label="X（@teamkusunoki）">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-      </a>
-      <a href="https://www.instagram.com/team.kusunoki" target="_blank" rel="noopener" aria-label="Instagram（@team.kusunoki）">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><circle cx="12" cy="12" r="3.8"/><circle cx="17.1" cy="6.9" r="1" fill="currentColor" stroke="none"/></svg>
-      </a>
-    </nav>
+    <div class="header-tools">
+      <nav class="header-nav" aria-label="ページ">
+        <a href="/works/">作品一覧</a>
+        <a href="/contact/">お問い合わせ</a>
+      </nav>
+      <nav class="sns-links" aria-label="SNS">
+        <a href="https://x.com/teamkusunoki" target="_blank" rel="noopener" aria-label="X（@teamkusunoki）">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/team.kusunoki" target="_blank" rel="noopener" aria-label="Instagram（@team.kusunoki）">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><circle cx="12" cy="12" r="3.8"/><circle cx="17.1" cy="6.9" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+      </nav>
+    </div>
   </div>
 </header>
 
@@ -102,18 +108,26 @@
       </div>
     </div>
 
-    <!-- 作品紹介エリア。中身は後で入れるので、今は枠だけ -->
-    <div class="hero__works" aria-hidden="true">
-      <p class="hero__works-label">WORKS</p>
-      <div class="hero__works-slots">
-        <span></span><span></span><span></span>
-      </div>
-      <p class="hero__works-note">冊子と Web の謎解き</p>
+    <div class="hero__works">
+      <a class="hero__work" href="/works/november-kyusai/">
+        <div class="book-stack">
+          <div class="book book--mei">
+            <img src="/images/november/book-mei.jpg" alt="">
+          </div>
+          <div class="book book--yoi">
+            <img src="/images/november/book-yoi.jpg" alt="">
+          </div>
+        </div>
+        <p class="hero__work-copy">
+          <span class="hero__work-name">11月の救祭</span>
+          <span class="hero__work-when">販売時期<span>11/20~11/23</span></span>
+        </p>
+      </a>
     </div>
   </section>
 
 </main>
 
-<script src="/js/main.js?v=20261114c"></script>
+<script src="/js/main.js?v=20261114d"></script>
 </body>
 </html>

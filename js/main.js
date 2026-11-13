@@ -273,4 +273,16 @@
     update();
   })();
 
+  (function bookStack() {
+    var stack = document.querySelector('[data-book-stack]');
+    if (!stack) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    function sync() {
+      stack.classList.toggle('is-paused', document.hidden);
+    }
+    document.addEventListener('visibilitychange', sync);
+    sync();
+  })();
+
 })();
