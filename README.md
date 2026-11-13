@@ -84,8 +84,9 @@ sed -i '' 's/?v=[0-9]\{8\}/?v=20260901/g' *.html works/*.html
 
 ## 画像について
 
-`images/logo.png` は円の外側を透明にした表示用のロゴ。ヘッダー・フッター・
-ローディング・ファビコンで使っています。`images/logo.jpg` は OGP 用の正方形版です。
-どちらも `logo.jpg`（原本）から中心をそろえて書き出しています。
+`images/logo-v2.png`（白ロゴ）がメイン、`images/logo-dark-v2.png`（黒ロゴ）がダークモード用のファビコンです。
+どちらも円の外側を透明にした表示用ロゴで、ヘッダー・フッター・ローディング・ファビコンで使っています。
+`images/logo.jpg` は OGP 用の正方形版（白背景）です。
+`logo-v2.png` はユーザー提供の『白黒.png』、`logo-dark-v2.png` は『黒白.png』を512pxに整形したものです。
 
 2026-11-02: アプリURLを `https://team-kusunoki.com/11月の救祭/app/` に変更しました。日本語のパスは通信時にUTF-8でパーセントエンコードされます。保存APIは同一オリジンの `/api/play-saves`、作品ID・localStorageキー・D1・Secretは従来どおりです。既存の進行データを継続して使用できます。今後の公開でもこのパスを維持し、既存の `_redirects` がある場合は統合してください。

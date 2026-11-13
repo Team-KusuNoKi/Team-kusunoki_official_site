@@ -104,49 +104,6 @@
   })();
 
   /* -------------------------------------------------------
-     舞い落ちる葉（ヒーローを見ている間だけ）
-     ------------------------------------------------------- */
-  (function leaves() {
-    var box = document.querySelector('.leaves');
-    if (!box || reduceMotion) return;
-
-    var COUNT = window.innerWidth < 720 ? 9 : 15;
-    var LEAF = '<svg viewBox="0 0 24 40" fill="currentColor" aria-hidden="true">' +
-               '<path d="M12 0C19.5 11 22 27 12 40 2 27 4.5 11 12 0Z"/>' +
-               '<path d="M12 4v33" stroke="#1c1b19" stroke-width="1.1" opacity=".4"/>' +
-               '</svg>';
-
-    function rand(min, max) { return min + Math.random() * (max - min); }
-
-    var frag = document.createDocumentFragment();
-
-    for (var i = 0; i < COUNT; i++) {
-      var leaf = document.createElement('span');
-      leaf.className = 'leaf';
-
-      // 一枚ごとに大きさ・速さ・揺れ幅を変えて、同じ動きが揃わないようにする
-      leaf.style.setProperty('--x', rand(-4, 100).toFixed(1) + '%');
-      leaf.style.setProperty('--size', rand(11, 26).toFixed(0) + 'px');
-      leaf.style.setProperty('--fall', rand(13, 26).toFixed(1) + 's');
-      leaf.style.setProperty('--sway', rand(3.4, 6.5).toFixed(1) + 's');
-      leaf.style.setProperty('--delay', (-rand(0, 22)).toFixed(1) + 's');
-      leaf.style.setProperty('--drift', rand(-140, 180).toFixed(0) + 'px');
-      leaf.style.setProperty('--amp', rand(14, 42).toFixed(0) + 'px');
-      leaf.style.setProperty('--tilt-a', rand(-70, -10).toFixed(0) + 'deg');
-      leaf.style.setProperty('--tilt-b', rand(10, 80).toFixed(0) + 'deg');
-      leaf.style.setProperty('--opa', rand(0.16, 0.46).toFixed(2));
-
-      var inner = document.createElement('span');
-      inner.className = 'leaf__inner';
-      inner.innerHTML = LEAF;
-      leaf.appendChild(inner);
-      frag.appendChild(leaf);
-    }
-
-    box.appendChild(frag);
-  })();
-
-  /* -------------------------------------------------------
      見出しを1文字ずつに分割する
      テキストノードだけを対象にするので、<br> や装飾用の span は壊れない
      ------------------------------------------------------- */
@@ -274,7 +231,6 @@
   (function scrollEffects() {
     var progress = document.querySelector('.scroll-progress');
     var header = document.querySelector('.site-header');
-    var leafBox = document.querySelector('.leaves');
     var photo = document.querySelector('.hero__photo');
     var playBar = document.querySelector('.play-bar');
     var root = document.documentElement;
@@ -293,13 +249,18 @@
       // 作品ページの「はじめる」帯は、最初の画面を過ぎてから出す
       if (playBar) playBar.setAttribute('data-show', String(y > window.innerHeight * 0.6));
 
-      // 葉は最初の画面を見ている間だけ
-      if (leafBox) leafBox.setAttribute('data-hidden', String(y > 40));
-
       if (reduceMotion) { ticking = false; return; }
 
       // 写真は文字よりゆっくり沈める
       if (photo) photo.style.setProperty('--photo-shift', (y * 0.14) + 'px');
+
+      // スクロールするほど空が夜へ沈む（下部のオレンジの霞が暗くなる）。
+      // ヒーローは画面高ちょうどなので、1.4画面分のスクロールで完了させる
+      var duskEl = document.querySelector('.hero__photo--night');
+      if (duskEl) {
+        var p = Math.min(Math.max(y / (window.innerHeight * 1.4), 0), 1);
+        duskEl.style.setProperty('--dusk', (p * p * (3 - 2 * p)).toFixed(3));
+      }
 
       ticking = false;
     }
