@@ -1724,6 +1724,118 @@ a.record { color: inherit; }
 .play-bar[data-show="true"] { transform: none; }
 .play-bar small { display: block; font-size: .58rem; letter-spacing: .2em; opacity: .8; }
 
+/* ---------- 作品一覧（年ごとの行に冊子エリア） ---------- */
+
+.works-index {
+  height: 100svh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--ink);
+  color: var(--on-ink);
+  padding: calc(var(--header-h) + 4px) 0 calc(16px + env(safe-area-inset-bottom));
+}
+.works-index__head {
+  flex: none;
+  padding: 8px var(--gutter) 10px;
+}
+.works-index__label {
+  margin: 0 0 6px;
+  font-family: var(--sans);
+  font-size: 0.64rem;
+  letter-spacing: 0.28em;
+  color: var(--accent);
+}
+.works-index__title {
+  margin: 0;
+  font-family: var(--mincho);
+  font-weight: 400;
+  font-size: clamp(1.35rem, 2.4vw, 1.8rem);
+  letter-spacing: 0.14em;
+}
+.year-list {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0 var(--gutter);
+  list-style: none;
+}
+.year-row {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 18px 28px;
+  align-items: center;
+  border-top: 1px solid var(--rule-ink);
+}
+.year-row:last-child { border-bottom: 1px solid var(--rule-ink); }
+.year-row__year {
+  margin: 0;
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(2.4rem, 6vw, 4.4rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+.year-row__year small {
+  margin-left: 0.12em;
+  font-family: var(--mincho);
+  font-style: normal;
+  font-size: 0.38em;
+  letter-spacing: 0.12em;
+}
+.booklets {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  padding: 14px 0;
+}
+.booklet {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+  max-width: 100%;
+  color: inherit;
+}
+.booklet__sheet {
+  flex: none;
+  width: auto;
+  height: min(32svh, 300px);
+  max-width: 100%;
+  aspect-ratio: 3 / 4;
+  border: 1px solid var(--rule-ink);
+  background:
+    linear-gradient(160deg, rgba(240, 237, 228, .07), rgba(240, 237, 228, .02)),
+    rgba(28, 27, 25, .35);
+  display: flex;
+  align-items: flex-end;
+  padding: 10px 12px;
+  font-family: var(--sans);
+  font-size: 0.58rem;
+  letter-spacing: 0.22em;
+  color: var(--on-ink-dim);
+}
+.booklet__name {
+  flex: none;
+  font-family: var(--mincho);
+  font-size: 0.84rem;
+  letter-spacing: 0.12em;
+  line-height: 1.4;
+}
+.booklet:hover .booklet__name { color: var(--accent); }
+.booklet:hover .booklet__sheet { border-color: rgba(240, 237, 228, .45); }
+
 
 /* ---------------------------------------------------------
    レスポンシブ
@@ -1779,30 +1891,75 @@ a.record { color: inherit; }
   .global-nav a { padding: 18px var(--gutter); font-size: 0.88rem; }
 
   .sheet { padding: 88px 0; }
-  .hero {
-    flex-direction: column;
-    justify-content: center;
-    padding: calc(var(--header-h) + 20px) 0 20px;
-  }
   .about-statement { margin-bottom: 40px; }
   .btn { min-width: 0; width: 100%; gap: 24px; }
 
-  /* 1画面に収めるため、ヒーロー内の余白を詰める */
-  .hero { align-items: flex-end; }
-  .hero__eyebrow { margin-bottom: 14px; }
-  .hero__heading { margin-bottom: 22px; }
-  .hero__actions { margin-top: 28px; }
-  .hero__actions .btn { padding: 16px 24px; }
+  /* 1画面に収める。本文の下に作品枠、ボタンは画面下（フッター位置） */
+  .hero {
+    height: 100svh;
+    max-height: 100svh;
+    min-height: 0;
+    overflow: hidden;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    padding: calc(var(--header-h) + 16px) var(--gutter) calc(56px + env(safe-area-inset-bottom));
+  }
+  .hero__inner { display: contents; }
+  .hero__eyebrow,
+  .hero__heading,
+  .hero__desc { position: relative; z-index: 2; }
+  .hero__eyebrow { margin-bottom: 12px; }
+  .hero__heading { margin-bottom: 16px; }
   .hero__works {
+    order: 1;
     position: relative;
     right: auto; bottom: auto;
+    z-index: 2;
     width: auto;
-    margin: 0 var(--gutter);
-    padding: 18px 20px 16px;
+    flex: 0 0 auto;
+    margin: 22px 0 0;
+    padding: 16px 18px 14px;
   }
-  .hero__works-label { margin-bottom: 14px; }
+  .hero__works-label { margin-bottom: 12px; }
   .hero__works-slots { gap: 8px; }
-  .hero__works-note { margin-top: 14px; }
+  .hero__works-slots span { aspect-ratio: auto; height: clamp(48px, 12svh, 120px); }
+  .hero__works-note { margin-top: 12px; }
+  .hero__actions {
+    position: absolute;
+    left: var(--gutter);
+    right: var(--gutter);
+    bottom: calc(18px + env(safe-area-inset-bottom));
+    z-index: 3;
+    width: auto;
+    margin: 0;
+    gap: 28px;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+  .js .hero__actions[data-reveal] { opacity: 1; transform: none; }
+  .hero__actions .btn {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 0;
+    gap: 0;
+    padding: 12px 2px;
+    background: transparent;
+    border: 0;
+    color: var(--on-ink);
+    font-family: var(--mincho);
+    font-size: 0.78rem;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+  .hero__actions .btn::after { content: none; }
+  .hero__actions .btn:hover {
+    background: transparent;
+    border: 0;
+    color: var(--accent);
+  }
   .hero__foot-meta span + span { display: none; }
 
   .global-nav .nav-cta a { border: 0; padding: 18px var(--gutter); }
@@ -1880,8 +2037,12 @@ a.record { color: inherit; }
   .archive-item__thumb { grid-row: 1 / span 3; }
   .archive-item__no, .archive-item__title, .archive-item__meta { grid-column: 2; }
   .archive-item .record__arrow { grid-column: 3; grid-row: 1 / span 3; }
-  .hero__works { padding: 20px; }
-  .hero__works-slots span { aspect-ratio: 1 / 1; }
+  .hero__works { padding: 14px 14px 12px; }
+  .hero__works-slots span { height: clamp(44px, 11svh, 96px); }
+  .year-row { gap: 12px 16px; }
+  .year-row__year { font-size: clamp(1.8rem, 11vw, 2.6rem); }
+  .booklet__sheet { height: min(22svh, 168px); }
+  .booklet__name { font-size: 0.78rem; }
   .site-footer { padding-top: 80px; }
   .detail-table th { width: auto; display: block; padding-bottom: 0; border-bottom: 0; }
   .detail-table td { display: block; padding-top: 6px; }
