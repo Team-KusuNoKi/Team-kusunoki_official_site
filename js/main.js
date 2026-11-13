@@ -301,22 +301,4 @@
     });
   })();
 
-  /* -------------------------------------------------------
-     ヘッダーの料金：トグルで周遊版の行を開閉する
-     ------------------------------------------------------- */
-  (function salesPrice() {
-    var toggle = document.querySelector('.sales-price__toggle');
-    if (!toggle) return;
-
-    var sub = document.getElementById(toggle.getAttribute('aria-controls'));
-    var bar = toggle.closest('.sales-bar');
-
-    toggle.addEventListener('click', function () {
-      var open = toggle.getAttribute('aria-expanded') === 'true';
-      toggle.setAttribute('aria-expanded', String(!open));
-      if (sub) sub.hidden = open;
-      if (bar) bar.setAttribute('data-price-open', String(!open));
-    });
-  })();
-
 })();

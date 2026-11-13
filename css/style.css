@@ -2226,45 +2226,6 @@ body.sales-page {
   letter-spacing: 0.04em;
 }
 .sales-bar__side { display: flex; align-items: center; gap: 18px; }
-.sales-price__main {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
-  margin: 0;
-}
-.sales-price__toggle {
-  width: 22px; height: 22px;
-  padding: 0;
-  border: 1px solid var(--rule-ink);
-  border-radius: 50%;
-  background: none;
-  color: var(--on-ink-dim);
-  font-size: 0.62rem;
-  line-height: 1;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform .3s ease, color .25s ease, border-color .25s ease;
-}
-.sales-price__toggle:hover { color: var(--on-ink); border-color: var(--on-ink-faint); }
-.sales-price__toggle[aria-expanded="true"] { transform: rotate(180deg); color: var(--accent); }
-.sales-price__sub {
-  display: block;
-  margin-top: 4px;
-  font-family: var(--mincho);
-  font-size: 0.78rem;
-  letter-spacing: 0.04em;
-  color: var(--on-ink-dim);
-}
-.sales-price__sub[hidden] { display: none; }
-/* 周遊版を開いている間は、ヘッダーごと下へ伸ばす */
-.sales-bar[data-price-open="true"] {
-  height: auto;
-  min-height: var(--header-h);
-  padding: 10px 0;
-}
 .sales-bar .btn {
   min-width: 0;
   gap: 14px;
