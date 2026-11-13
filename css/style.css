@@ -213,6 +213,12 @@ a { color: inherit; text-decoration: none; }
   margin: 0;
 }
 
+/* ヘッダーのロゴとサイト名は全ページで小さめにそろえる */
+.site-header .brand__mark,
+.sales-bar .brand__mark { width: 36px; height: 36px; }
+.site-header .brand__name,
+.sales-bar .brand__name { font-size: 1rem; color: var(--on-ink); }
+
 /* ヘッダー右のSNSボタン。アイコンだけの円形 */
 .sns-links { display: flex; align-items: center; gap: 10px; }
 .sns-links a {
@@ -1800,13 +1806,12 @@ a.record { color: inherit; }
 /* ---------- 作品一覧（年ごとの行に冊子エリア） ---------- */
 
 .works-index {
-  height: 100svh;
-  overflow: hidden;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
   background: var(--ink);
   color: var(--on-ink);
-  padding: calc(var(--header-h) + 4px) 0 calc(16px + env(safe-area-inset-bottom));
+  padding: calc(var(--header-h) + 4px) 0 calc(20px + env(safe-area-inset-bottom));
 }
 .works-index__head {
   flex: none;
@@ -1826,99 +1831,76 @@ a.record { color: inherit; }
   font-size: clamp(1.35rem, 2.4vw, 1.8rem);
   letter-spacing: 0.14em;
 }
-.year-list {
+/* 作品タイル：横に流して見せる。収まりきるときは中央に寄せ、
+   あふれるときは横スクロール。モバイルでは縦に積む */
+.work-list {
   flex: 1;
-  min-height: 0;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: safe center;
+  gap: 36px;
   margin: 0;
-  padding: 0 var(--gutter);
+  padding: 16px var(--gutter) 32px;
   list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
 }
-.year-row {
-  flex: 1;
-  min-height: 0;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 18px 28px;
-  align-items: center;
-  border-top: 1px solid var(--rule-ink);
-}
-.year-row:last-child { border-bottom: 1px solid var(--rule-ink); }
-.year-row__year {
-  margin: 0;
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 400;
-  font-size: clamp(2.4rem, 6vw, 4.4rem);
-  line-height: 1;
-  letter-spacing: 0.02em;
-}
-.year-row__year small {
-  margin-left: 0.12em;
-  font-family: var(--mincho);
-  font-style: normal;
-  font-size: 0.38em;
-  letter-spacing: 0.12em;
-}
-.booklets {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  min-width: 0;
-  min-height: 0;
-  height: 100%;
-  padding: 14px 0;
-}
-.booklet {
+.work-list > li { flex: none; scroll-snap-align: center; }
+
+.work-tile {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 8px;
-  height: 100%;
-  min-height: 0;
-  min-width: 0;
-  max-width: 100%;
+  width: min(232px, 60vw);
   color: inherit;
 }
-.booklet__sheet {
-  flex: none;
-  width: auto;
-  height: min(32svh, 300px);
-  max-width: 100%;
+.work-tile__cover {
+  display: block;
   aspect-ratio: 3 / 4;
   border: 1px solid var(--rule-ink);
-  background:
-    linear-gradient(160deg, rgba(240, 237, 228, .07), rgba(240, 237, 228, .02)),
-    rgba(28, 27, 25, .35);
-  display: flex;
-  align-items: flex-end;
-  padding: 10px 12px;
-  font-family: var(--sans);
-  font-size: 0.58rem;
-  letter-spacing: 0.22em;
-  color: var(--on-ink-dim);
-}
-.booklet__name {
-  flex: none;
-  font-family: var(--mincho);
-  font-size: 0.84rem;
-  letter-spacing: 0.12em;
-  line-height: 1.4;
-}
-.booklet:hover .booklet__name { color: var(--accent); }
-.booklet:hover .booklet__sheet { border-color: rgba(240, 237, 228, .45); }
-.booklet__sheet--photo {
-  padding: 0;
-  overflow: hidden;
   background: var(--stone);
+  overflow: hidden;
 }
-.booklet__sheet--photo img {
+.work-tile__cover img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
+.work-tile__text { display: block; margin-top: 12px; }
+.work-tile__year {
+  display: block;
+  font-family: var(--sans);
+  font-size: 0.6rem;
+  letter-spacing: 0.22em;
+  color: var(--on-ink-dim);
+}
+.work-tile__name {
+  display: block;
+  margin-top: 5px;
+  font-family: var(--mincho);
+  font-size: 0.88rem;
+  letter-spacing: 0.1em;
+  line-height: 1.5;
+}
+.work-tile:hover .work-tile__name { color: var(--accent); }
+.work-tile:hover .work-tile__cover { border-color: rgba(240, 237, 228, .45); }
+
+/* 一覧の下に置く、文字だけの小さな戻る先 */
+.works-index__foot {
+  flex: none;
+  margin: 0;
+  padding: 4px var(--gutter) 0;
+  text-align: center;
+}
+.works-index__home {
+  display: inline-block;
+  padding: 12px 8px;
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  letter-spacing: 0.26em;
+  color: var(--on-ink-dim);
+}
+.works-index__home:hover { color: var(--accent); }
 
 
 /* ---------------------------------------------------------
@@ -1989,7 +1971,8 @@ a.record { color: inherit; }
   .about-statement { margin-bottom: 40px; }
   .btn { min-width: 0; width: 100%; gap: 24px; }
 
-  /* 1画面に収める。本文の下に作品枠、ボタンは画面下（フッター位置） */
+  /* 1画面に収める。本文の下に作品枠、ボタンは画面下（フッター位置）。
+     上は詰め、作品枠の前後の余白をそろえてボタンとぶつからないようにする */
   .hero {
     display: flex;
     height: 100svh;
@@ -1999,14 +1982,15 @@ a.record { color: inherit; }
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
-    padding: calc(var(--header-h) + 16px) var(--gutter) calc(56px + env(safe-area-inset-bottom));
+    row-gap: 0;
+    padding: calc(var(--header-h) + 8px) var(--gutter) calc(92px + env(safe-area-inset-bottom));
   }
   .hero__inner { display: contents; }
   .hero__eyebrow,
   .hero__heading,
   .hero__desc { position: relative; z-index: 2; }
-  .hero__eyebrow { margin-bottom: 12px; }
-  .hero__heading { margin-bottom: 16px; }
+  .hero__eyebrow { margin-bottom: 10px; }
+  .hero__heading { margin-bottom: 14px; }
   .hero__break { display: none; }
   .hero__desc { margin-bottom: 0; }
   .hero__works {
@@ -2016,7 +2000,7 @@ a.record { color: inherit; }
     z-index: 2;
     width: auto;
     flex: 0 0 auto;
-    margin: 22px 0 0;
+    margin: 26px 0 0;
     padding: 16px 18px 14px;
   }
   .hero__works .book-stack { width: 120px; margin-left: 28px; }
@@ -2137,10 +2121,31 @@ a.record { color: inherit; }
   .hero__works { padding: 14px 14px 12px; }
   .hero__works .book-stack { width: 104px; margin-left: 22px; }
   .hero__work { grid-template-columns: 136px minmax(0, 1fr); }
-  .year-row { gap: 12px 16px; }
-  .year-row__year { font-size: clamp(1.8rem, 11vw, 2.6rem); }
-  .booklet__sheet { height: min(22svh, 168px); }
-  .booklet__name { font-size: 0.78rem; }
+
+  /* 作品タイルは横に流さず、罫線で区切って縦に積む */
+  .work-list {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 0;
+    overflow: visible;
+    padding-top: 4px;
+  }
+  .work-list > li { border-top: 1px solid var(--rule-ink); scroll-snap-align: none; }
+  .work-list > li:last-child { border-bottom: 1px solid var(--rule-ink); }
+  .work-tile {
+    flex-direction: row;
+    align-items: center;
+    gap: 18px;
+    width: 100%;
+    padding: 18px 0;
+  }
+  .work-tile__cover { width: 92px; flex: none; }
+  .work-tile__text { margin-top: 0; }
+
+  /* 料金＋ボタンでヘッダーがあふれるので、ボタンは本文側に任せる */
+  .sales-bar__enter { display: none; }
+  .sales-bar__side { gap: 12px; }
   .site-footer { padding-top: 80px; }
   .detail-table th { width: auto; display: block; padding-bottom: 0; border-bottom: 0; }
   .detail-table td { display: block; padding-top: 6px; }
@@ -2206,8 +2211,6 @@ body.sales-page {
   justify-content: space-between;
   gap: 20px;
 }
-.sales-bar .brand__mark { width: 36px; height: 36px; }
-.sales-bar .brand__name { font-size: 1rem; color: var(--on-ink); }
 .sales-price { margin: 0; text-align: right; }
 .sales-price__label {
   display: block;
@@ -2221,6 +2224,46 @@ body.sales-page {
   font-weight: 400;
   font-size: 1.15rem;
   letter-spacing: 0.04em;
+}
+.sales-bar__side { display: flex; align-items: center; gap: 18px; }
+.sales-price__main {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin: 0;
+}
+.sales-price__toggle {
+  width: 22px; height: 22px;
+  padding: 0;
+  border: 1px solid var(--rule-ink);
+  border-radius: 50%;
+  background: none;
+  color: var(--on-ink-dim);
+  font-size: 0.62rem;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .3s ease, color .25s ease, border-color .25s ease;
+}
+.sales-price__toggle:hover { color: var(--on-ink); border-color: var(--on-ink-faint); }
+.sales-price__toggle[aria-expanded="true"] { transform: rotate(180deg); color: var(--accent); }
+.sales-price__sub {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--mincho);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: var(--on-ink-dim);
+}
+.sales-price__sub[hidden] { display: none; }
+/* 周遊版を開いている間は、ヘッダーごと下へ伸ばす */
+.sales-bar[data-price-open="true"] {
+  height: auto;
+  min-height: var(--header-h);
+  padding: 10px 0;
 }
 .sales-bar .btn {
   min-width: 0;
@@ -2433,10 +2476,10 @@ body:has(.case--poster) .sales-stage {
 @media (max-width: 620px) {
   .sales-stage { padding: 16px 0; }
   .sales-stage .case__name { font-size: 1.55rem; }
-  .sales-foot__inner { align-items: flex-start; }
-}
-@media (max-width: 480px) {
-  .sales-bar__enter { display: none; }
+  /* フッターは左右に分けず、コピーライトとリンクを縦に積む */
+  .sales-foot { padding: 18px 0 26px; }
+  .sales-foot__inner { flex-direction: column; align-items: flex-start; gap: 18px; }
+  .sales-foot .footer-nav { flex-direction: column; gap: 12px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
