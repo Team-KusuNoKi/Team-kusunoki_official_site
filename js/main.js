@@ -217,7 +217,7 @@
      ------------------------------------------------------- */
   (function scrollEffects() {
     var progress = document.querySelector('.scroll-progress');
-    var header = document.querySelector('.site-header');
+    var header = document.querySelector('.site-header, .sales-bar');
     var photo = document.querySelector('.hero__photo');
     var playBar = document.querySelector('.play-bar');
     var root = document.documentElement;
@@ -283,6 +283,22 @@
     }
     document.addEventListener('visibilitychange', sync);
     sync();
+  })();
+
+  (function playNotice() {
+    var dialog = document.querySelector('.play-dialog');
+    if (!dialog || !dialog.showModal) return;
+
+    document.addEventListener('click', function (event) {
+      var opener = event.target.closest ? event.target.closest('[data-play-open]') : null;
+      if (!opener) return;
+      event.preventDefault();
+      dialog.showModal();
+    });
+
+    dialog.addEventListener('click', function (event) {
+      if (event.target === dialog) dialog.close();
+    });
   })();
 
 })();
