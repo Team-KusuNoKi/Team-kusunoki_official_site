@@ -74,6 +74,12 @@ img { max-width: 100%; height: auto; display: block; }
 
 a { color: inherit; text-decoration: none; }
 
+/* タップ時にブラウザが重ねる青いハイライトを消す。押下の演出は自前で統一する */
+a, button { -webkit-tap-highlight-color: transparent; }
+
+/* .btn など display を指定したクラスよりも、常に hidden を優先する */
+[hidden] { display: none !important; }
+
 /* ---------------------------------------------------------
    共通パーツ：ラベル・番号・罫線
    --------------------------------------------------------- */
@@ -203,7 +209,10 @@ a { color: inherit; text-decoration: none; }
   border-radius: 50%;
   object-fit: cover;
   flex: none;
+  transition: transform .45s cubic-bezier(.16, 1, .3, 1);
 }
+.brand:hover .brand__mark { transform: scale(1.09); }
+.brand:active .brand__mark { transform: scale(.93); }
 .brand__name {
   font-family: var(--serif);
   font-size: 1.12rem;
@@ -230,13 +239,15 @@ a { color: inherit; text-decoration: none; }
   border-radius: 50%;
   color: var(--on-ink);
   opacity: .8;
-  transition: opacity .25s ease, background .25s ease, border-color .25s ease;
+  transition: opacity .25s ease, background .25s ease, border-color .25s ease,
+              transform .22s cubic-bezier(.34, 1.56, .64, 1);
 }
 .sns-links a:hover {
   opacity: 1;
   background: rgba(240, 237, 228, .08);
   border-color: var(--on-ink-faint);
 }
+.sns-links a:active { transform: scale(.86); }
 .sns-links svg { width: 17px; height: 17px; display: block; }
 
 /* PCではヒーローの大きなボタンをやめ、ヘッダーの文字リンクにする */
@@ -248,8 +259,10 @@ a { color: inherit; text-decoration: none; }
   letter-spacing: 0.12em;
   color: var(--on-ink);
   white-space: nowrap;
+  transition: color .25s ease, opacity .2s ease;
 }
 .header-nav a:hover { color: var(--accent); }
+.header-nav a:active { opacity: .6; }
 @media (min-width: 861px) {
   .hero__actions.btn-row { display: none; }
 }
@@ -276,6 +289,7 @@ a { color: inherit; text-decoration: none; }
 }
 .global-nav a:hover,
 .global-nav a[aria-current] { opacity: 1; }
+.global-nav a:active { background: rgba(240, 237, 228, 0.06); }
 .global-nav .no {
   font-family: var(--serif);
   font-style: italic;
@@ -291,7 +305,9 @@ a { color: inherit; text-decoration: none; }
   border: 0;
   cursor: pointer;
   position: relative;
+  transition: opacity .2s ease;
 }
+.nav-toggle:active { opacity: .55; }
 .nav-toggle span {
   position: absolute;
   left: 10px;
@@ -529,7 +545,9 @@ a { color: inherit; text-decoration: none; }
   transition: background .35s ease, padding-left .35s ease;
 }
 a.record:hover { background: rgba(28, 27, 25, 0.045); padding-left: 20px; }
+a.record:active { background: rgba(28, 27, 25, 0.09); }
 .sheet--ink a.record:hover { background: rgba(240, 237, 228, 0.05); }
+.sheet--ink a.record:active { background: rgba(240, 237, 228, 0.11); }
 
 .record__no {
   font-family: var(--serif);
@@ -881,11 +899,17 @@ a.record:hover .record__arrow { transform: translate(4px, -4px); }
   cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
-  transition: background .3s ease, color .3s ease;
+  transition:
+    background .3s ease,
+    color .3s ease,
+    border-color .3s ease,
+    transform .28s cubic-bezier(.34, 1.56, .64, 1);
 }
 .btn::after { content: "↗"; font-size: 1.1rem; transition: transform .35s cubic-bezier(.16, 1, .3, 1); }
 .btn:hover::after { transform: translate(3px, -3px); }
 .btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+/* 押した瞬間は沈み込み、離すとわずかに跳ねて戻る */
+.btn:active { transform: scale(.96); }
 
 .sheet--ink .btn { background: var(--on-ink); color: var(--ink); border-color: var(--on-ink); }
 .sheet--ink .btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
@@ -1104,9 +1128,10 @@ a.record:hover .record__arrow { transform: translate(4px, -4px); }
   font-size: 0.62rem;
   letter-spacing: 0.18em;
   color: var(--on-ink-dim);
-  transition: color .25s ease;
+  transition: color .25s ease, opacity .2s ease;
 }
 .to-top:hover { color: var(--on-ink); }
+.to-top:active { opacity: .55; }
 
 .footer-nav { display: flex; flex-wrap: wrap; gap: 26px; margin: 0; padding: 0; list-style: none; }
 .footer-nav a {
@@ -1172,6 +1197,26 @@ a.record:hover .record__arrow { transform: translate(4px, -4px); }
 .js [data-reveal="right"] { transform: translateX(34px); }
 .js [data-reveal="scale"] { transform: scale(.96); }
 .js [data-reveal].is-visible { opacity: 1; transform: none; }
+
+/* ---------------------------------------------------------
+   ページ遷移
+   対応ブラウザでは、ページ同士をクロスフェードで繋ぐ。
+   動きを減らす設定のときは無効にする
+   --------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+}
+::view-transition-old(root) { animation: vt-out .3s ease both; }
+::view-transition-new(root) { animation: vt-in .55s cubic-bezier(.16, 1, .3, 1) both; }
+@keyframes vt-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+@keyframes vt-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
 
 .js [data-split] { opacity: 1 !important; transform: none !important; }
 .js .char {
@@ -1343,6 +1388,11 @@ body::after {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   overflow: hidden;
+  transition: border-color .4s ease, background .4s ease;
+}
+.hero__works:hover {
+  border-color: rgba(240, 237, 228, .34);
+  background: rgba(28, 27, 25, .54);
 }
 .hero__work {
   display: grid;
@@ -1351,15 +1401,23 @@ body::after {
   align-items: center;
   color: inherit;
   text-decoration: none;
+  transition: transform .3s cubic-bezier(.34, 1.56, .64, 1);
 }
 .hero__work:hover .hero__work-name { color: var(--accent); }
+.hero__work:active { transform: scale(.98); }
 .hero__works .book-stack {
   position: relative;
   width: 78%;
   margin-left: 16%;
   height: auto;
   aspect-ratio: 721 / 1024;
+  animation: book-drift 7.5s ease-in-out infinite;
 }
+@keyframes book-drift {
+  0%, 100% { transform: translateY(0) rotate(.4deg); }
+  50%      { transform: translateY(-7px) rotate(-.6deg); }
+}
+.book-stack.is-paused { animation-play-state: paused; }
 .hero__works .book {
   position: absolute;
   inset: 0;
@@ -1576,6 +1634,7 @@ body::after {
   transition: background .35s ease, padding-left .35s ease;
 }
 .archive-item:hover { background: rgba(28, 27, 25, 0.045); padding-left: 20px; }
+.archive-item:active { background: rgba(28, 27, 25, 0.09); }
 .archive-item__thumb { aspect-ratio: 3 / 4; overflow: hidden; background: var(--stone); }
 .archive-item__thumb img { width: 100%; height: 100%; object-fit: cover; }
 .archive-item__no {
@@ -1852,20 +1911,25 @@ a.record { color: inherit; }
   flex-direction: column;
   width: min(232px, 60vw);
   color: inherit;
+  transition: transform .3s cubic-bezier(.34, 1.56, .64, 1);
 }
+.work-tile:active { transform: scale(.96); }
 .work-tile__cover {
   display: block;
   aspect-ratio: 3 / 4;
   border: 1px solid var(--rule-ink);
   background: var(--stone);
   overflow: hidden;
+  transition: border-color .35s ease;
 }
 .work-tile__cover img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 1.2s cubic-bezier(.16, 1, .3, 1);
 }
+.work-tile:hover .work-tile__cover img { transform: scale(1.06); }
 .work-tile__text { display: block; margin-top: 12px; }
 .work-tile__year {
   display: block;
@@ -1899,8 +1963,10 @@ a.record { color: inherit; }
   font-size: 0.68rem;
   letter-spacing: 0.26em;
   color: var(--on-ink-dim);
+  transition: color .25s ease, opacity .2s ease;
 }
 .works-index__home:hover { color: var(--accent); }
+.works-index__home:active { opacity: .55; }
 
 
 /* ---------------------------------------------------------
@@ -2328,8 +2394,29 @@ body.sales-page {
   border-radius: 8px;
   background: var(--paper);
   color: var(--on-paper);
+  opacity: 0;
+  transform: translateY(18px) scale(.96);
+  transition:
+    opacity .42s cubic-bezier(.16, 1, .3, 1),
+    transform .42s cubic-bezier(.16, 1, .3, 1),
+    overlay .42s ease allow-discrete,
+    display .42s ease allow-discrete;
 }
-.play-dialog::backdrop { background: rgba(28, 27, 25, 0.48); }
+.play-dialog[open] { opacity: 1; transform: none; }
+@starting-style {
+  .play-dialog[open] { opacity: 0; transform: translateY(18px) scale(.96); }
+}
+.play-dialog::backdrop {
+  background: rgba(28, 27, 25, 0);
+  transition:
+    background .42s ease,
+    overlay .42s ease allow-discrete,
+    display .42s ease allow-discrete;
+}
+.play-dialog[open]::backdrop { background: rgba(28, 27, 25, 0.48); }
+@starting-style {
+  .play-dialog[open]::backdrop { background: rgba(28, 27, 25, 0); }
+}
 .play-dialog p {
   margin: 0 0 22px;
   font-size: 0.95rem;
@@ -2349,8 +2436,10 @@ body.sales-page {
   font-size: 0.72rem;
   letter-spacing: 0.16em;
   cursor: pointer;
+  transition: color .25s ease, opacity .2s ease;
 }
 .play-dialog__close:hover { color: var(--on-paper); }
+.play-dialog__close:active { opacity: .55; }
 
 .sales-foot {
   background: var(--paper);
@@ -2453,6 +2542,7 @@ body:has(.case--poster) .sales-stage {
   .glow, .scroll-progress, .loader { display: none; }
   .nf-hero__bg img { animation: none; }
   .hero__scroll::after, .global-nav .nav-cta a::before { animation: none; }
+  .hero__works .book-stack { animation: none; }
   .marquee__inner { animation: none; }
   .hero__photo { transform: scale(1.08) !important; }
   .sales-stage .book--mei,

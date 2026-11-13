@@ -177,6 +177,7 @@
 
     var glow = document.querySelector('.glow');
     var lifts = document.querySelectorAll('.lift');
+    var photos = document.querySelectorAll('.hero__photo');
 
     var px = 0, py = 0, ticking = false;
 
@@ -184,6 +185,16 @@
       if (glow) {
         glow.style.setProperty('--gx', px + 'px');
         glow.style.setProperty('--gy', py + 'px');
+      }
+
+      // 写真をカーソルの逆方向へ少しだけずらして奥行きを出す
+      if (photos.length) {
+        var mx = (0.5 - px / window.innerWidth) * 18;
+        var my = (0.5 - py / window.innerHeight) * 14;
+        photos.forEach(function (photo) {
+          photo.style.setProperty('--mx', mx.toFixed(1) + 'px');
+          photo.style.setProperty('--my', my.toFixed(1) + 'px');
+        });
       }
 
       ticking = false;
