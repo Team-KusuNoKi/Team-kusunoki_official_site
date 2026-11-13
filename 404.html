@@ -16,8 +16,10 @@
 <meta property="og:image" content="https://team-kusunoki.com/images/logo.jpg">
 <meta name="twitter:card" content="summary_large_image">
 
-<link rel="icon" href="/images/logo.png">
-<link rel="stylesheet" href="/css/style.css?v=20261008">
+<link rel="icon" href="/images/logo.png" media="(prefers-color-scheme: light)">
+<link rel="icon" href="/images/logo-dark.png" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="/images/logo.png">
+<link rel="stylesheet" href="/css/style.css?v=20261113">
 <script>document.documentElement.className += ' js';</script>
 </head>
 <body>
@@ -42,8 +44,8 @@
         <li><a href="/#news"><span class="no">01</span>お知らせ</a></li>
         <li><a href="/#about"><span class="no">02</span>概要</a></li>
         <li><a href="/#works"><span class="no">03</span>作品</a></li>
-        <li><a href="/#members"><span class="no">04</span>メンバー</a></li>
-        <li><a href="/#contact"><span class="no">05</span>お問い合わせ</a></li>
+        <li><a href="/#contact"><span class="no">04</span>お問い合わせ</a></li>
+        <li class="nav-cta"><a href="/works/november-kyusai/">11月の救祭</a></li>
       </ul>
     </nav>
   </div>
@@ -76,25 +78,28 @@
 </main>
 
 <footer class="site-footer">
-  <div class="wrap site-footer__inner">
-    <a class="brand" href="/">
-      <img class="brand__mark" src="/images/logo.png" alt="">
-      <span class="brand__name">Team.KusuNoKi</span>
-    </a>
-
-    <ul class="footer-nav">
-                  <li><a href="/#news">お知らせ</a></li>
-      <li><a href="/#about">概要</a></li>
-      <li><a href="/#works">作品</a></li>
-      <li><a href="/#members">メンバー</a></li>
-      <li><a href="/#contact">お問い合わせ</a></li>
-    </ul>
-
-    <p class="copyright">&copy; 2026 TEAM.KUSUNOKI</p>
-    <a class="to-top" href="#top">BACK TO TOP ↑</a>
+  <div class="wrap">
+    <div class="site-footer__top">
+      <p class="site-footer__word" aria-hidden="true"><em>Team.</em>KusuNoKi<span class="hero__dot"></span></p>
+      <ul class="footer-nav">
+        <li><a href="/#news">お知らせ</a></li>
+        <li><a href="/#about">概要</a></li>
+        <li><a href="/#works">作品</a></li>
+        <li><a href="/works/november-kyusai/">11月の救祭</a></li>
+        <li><a href="/#contact">お問い合わせ</a></li>
+      </ul>
+    </div>
+    <div class="site-footer__inner">
+      <a class="brand" href="/">
+        <img class="brand__mark" src="/images/logo.png" alt="">
+        <span class="brand__name">Team.KusuNoKi</span>
+      </a>
+      <p class="copyright">&copy; 2026 TEAM.KUSUNOKI</p>
+      <a class="to-top" href="#top">BACK TO TOP ↑</a>
+    </div>
   </div>
 </footer>
 
-<script src="/js/main.js?v=20261008"></script>
+<script src="/js/main.js?v=20261113"></script>
 </body>
 </html>

@@ -104,144 +104,6 @@
   })();
 
   /* -------------------------------------------------------
-     メンバー紹介の横送り（狭い画面のときだけ）
-     位置表示を付けて、見ている間だけ自動で次へ進める
-     ------------------------------------------------------- */
-  (function memberCarousel() {
-    var track = document.querySelector('.member-grid');
-    if (!track) return;
-
-    var cards = [].slice.call(track.querySelectorAll('.member'));
-    if (cards.length < 2) return;
-
-    var narrow = window.matchMedia('(max-width: 620px)');
-    var INTERVAL = 5000;   // 次の人へ進むまで
-    var RESUME   = 8000;   // 手で操作したあと、自動送りを再開するまで
-
-    // 位置表示。押すとその人へ移動する
-    var dots = document.createElement('ul');
-    dots.className = 'member-dots';
-    var buttons = cards.map(function (card, i) {
-      var li = document.createElement('li');
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.setAttribute('aria-label', (i + 1) + '人目を表示');
-      btn.addEventListener('click', function () {
-        hold();
-        go(i);
-      });
-      li.appendChild(btn);
-      dots.appendChild(li);
-      return btn;
-    });
-    track.parentNode.insertBefore(dots, track.nextSibling);
-
-    var index = 0;
-    var timer = null;
-    var holdTimer = null;
-
-    // カードを枠の中央に持ってくる位置を求める
-    function offsetFor(card) {
-      var t = track.getBoundingClientRect();
-      var c = card.getBoundingClientRect();
-      return track.scrollLeft + (c.left - t.left) - (t.width - c.width) / 2;
-    }
-
-    // いま中央にいちばん近いカードを探す
-    function nearest() {
-      var t = track.getBoundingClientRect();
-      var mid = t.left + t.width / 2;
-      var best = 0, bestDist = Infinity;
-      cards.forEach(function (card, i) {
-        var c = card.getBoundingClientRect();
-        var dist = Math.abs(c.left + c.width / 2 - mid);
-        if (dist < bestDist) { bestDist = dist; best = i; }
-      });
-      return best;
-    }
-
-    function go(i) {
-      index = (i + cards.length) % cards.length;
-      track.scrollTo({
-        left: offsetFor(cards[index]),
-        behavior: reduceMotion ? 'auto' : 'smooth'
-      });
-      mark();
-    }
-
-    function mark() {
-      buttons.forEach(function (b, i) {
-        if (i === index) b.setAttribute('aria-current', 'true');
-        else b.removeAttribute('aria-current');
-      });
-      cards.forEach(function (card, i) {
-        card.classList.toggle('is-active', i === index);
-      });
-    }
-
-    function stop() {
-      if (timer) { clearInterval(timer); timer = null; }
-    }
-
-    function start() {
-      stop();
-      // 動きを抑える設定のときや、広い画面では自動送りしない
-      if (reduceMotion || !narrow.matches || !visible || document.hidden) return;
-      timer = setInterval(function () { go(index + 1); }, INTERVAL);
-    }
-
-    // 手で触っている間は自動送りを止め、しばらく置いてから再開する
-    function hold() {
-      stop();
-      if (holdTimer) clearTimeout(holdTimer);
-      holdTimer = setTimeout(start, RESUME);
-    }
-
-    ['pointerdown', 'touchstart', 'wheel'].forEach(function (ev) {
-      track.addEventListener(ev, hold, { passive: true });
-    });
-
-    // スクロールしている間も見に行き、中央に来た時点で切り替える。
-    // 止まるのを待つと、指を離してから明るくなるまでが遅く感じられるため。
-    // scroll は1フレームに1回しか飛ばないので、そのまま拾って差し支えない
-    track.addEventListener('scroll', function () {
-      var i = nearest();
-      if (i !== index) { index = i; mark(); }
-    }, { passive: true });
-
-    // 画面に入っている間だけ動かす
-    var visible = true;
-    if ('IntersectionObserver' in window) {
-      visible = false;
-      new IntersectionObserver(function (entries) {
-        visible = entries[0].isIntersecting;
-        if (visible) start(); else stop();
-      }, { threshold: 0.35 }).observe(track);
-    }
-
-    document.addEventListener('visibilitychange', function () {
-      if (document.hidden) stop(); else start();
-    });
-
-    // 画面幅が変わったら、横送りかどうかを判定し直す
-    function sync() {
-      if (!narrow.matches) {
-        stop();
-        track.scrollLeft = 0;
-        index = 0;
-      }
-      mark();
-      start();
-    }
-    if (narrow.addEventListener) narrow.addEventListener('change', sync);
-    else narrow.addListener(sync);
-    window.addEventListener('resize', function () { go(index); }, { passive: true });
-
-    mark();
-    start();
-  })();
-
-  /* -------------------------------------------------------
      舞い落ちる葉（ヒーローを見ている間だけ）
      ------------------------------------------------------- */
   (function leaves() {
@@ -414,6 +276,7 @@
     var header = document.querySelector('.site-header');
     var leafBox = document.querySelector('.leaves');
     var photo = document.querySelector('.hero__photo');
+    var playBar = document.querySelector('.play-bar');
     var root = document.documentElement;
     var ticking = false;
 
@@ -426,6 +289,9 @@
       }
 
       if (header) header.classList.toggle('is-scrolled', y > 40);
+
+      // 作品ページの「はじめる」帯は、最初の画面を過ぎてから出す
+      if (playBar) playBar.setAttribute('data-show', String(y > window.innerHeight * 0.6));
 
       // 葉は最初の画面を見ている間だけ
       if (leafBox) leafBox.setAttribute('data-hidden', String(y > 40));
