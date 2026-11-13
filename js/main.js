@@ -289,10 +289,22 @@
     var dialog = document.querySelector('.play-dialog');
     if (!dialog || !dialog.showModal) return;
 
+    // NF初日（2026-11-20 0:00 JST）までは「準備中」とだけ出す
+    var opensAt = new Date('2026-11-20T00:00:00+09:00').getTime();
+    var closedText = '「11月の救祭」は現在準備中です。11月20日のNF初日からプレイできます。';
+    var text = dialog.querySelector('#play-dialog-text');
+    var enter = dialog.querySelector('a.btn');
+    var openText = text ? text.textContent : '';
+
     document.addEventListener('click', function (event) {
       var opener = event.target.closest ? event.target.closest('[data-play-open]') : null;
       if (!opener) return;
       event.preventDefault();
+
+      var playable = Date.now() >= opensAt;
+      if (text) text.textContent = playable ? openText : closedText;
+      if (enter) enter.hidden = !playable;
+
       dialog.showModal();
     });
 
