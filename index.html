@@ -76,9 +76,9 @@
 
     <nav class="global-nav" id="global-nav">
       <ul>
-        <li><a href="#works"><span class="no">01</span>作品</a></li>
-        <li><a href="#news"><span class="no">02</span>お知らせ</a></li>
-        <li><a href="#about"><span class="no">03</span>概要</a></li>
+        <li><a href="#news"><span class="no">01</span>お知らせ</a></li>
+        <li><a href="#about"><span class="no">02</span>概要</a></li>
+        <li><a href="#works"><span class="no">03</span>作品</a></li>
         <li><a href="#contact"><span class="no">04</span>お問い合わせ</a></li>
         <li class="nav-cta"><a href="/works/november-kyusai/">11月の救祭</a></li>
       </ul>
@@ -88,108 +88,51 @@
 
 <main>
 
-  <!-- ヒーロー：作品キービジュアルを切り替えて見せる -->
-  <section class="kv" id="top" aria-roledescription="carousel" aria-label="作品">
-    <div class="kv__slides">
-      <article class="kv__slide is-active" aria-roledescription="slide" aria-label="1 / 2">
-        <div class="kv__media" aria-hidden="true"><img src="/images/november/bonfire.jpg" alt="" width="1920" height="1080"></div>
-        <div class="wrap kv__body">
-          <p class="kv__label"><span class="kv__live"></span>FILE.02 — NOW PLAYING</p>
-          <h2 class="kv__title">11月の救祭</h2>
-          <p class="kv__meta">2026 11月祭 ／ 冊子 × Web</p>
-          <div class="btn-row">
-            <a class="btn btn--light" href="/11月の救祭/app/">PLAY</a>
-            <a class="btn btn--ghost" href="/works/november-kyusai/">VIEW CASE FILE</a>
-          </div>
-        </div>
-      </article>
-      <article class="kv__slide" aria-roledescription="slide" aria-label="2 / 2" aria-hidden="true">
-        <div class="kv__media" aria-hidden="true"><img src="/images/hero-bg.jpg" alt="" loading="lazy"></div>
-        <div class="wrap kv__body">
-          <p class="kv__label">FILE.01 — ARCHIVE</p>
-          <h2 class="kv__title">クスノキが<br>枯れた日</h2>
-          <p class="kv__meta">2025 11月祭 ／ 冊子 × Web</p>
-          <div class="btn-row">
-            <a class="btn btn--ghost" href="/works/kusunoki-ga-kareta-hi" tabindex="-1">VIEW CASE FILE</a>
-          </div>
-        </div>
-      </article>
+  <!-- ヒーロー -->
+  <section class="hero" id="top">
+    <div class="hero__photo" aria-hidden="true"></div>
+    <div class="leaves" aria-hidden="true"></div>
+
+    <div class="wrap hero__inner" data-stagger="140">
+      <p class="hero__eyebrow" data-reveal="up"><span class="tick"></span>京都発・物語のある謎解き</p>
+      <h1 class="hero__title" data-reveal="up">
+        <span class="hero__line1">Team.</span>
+        <span class="hero__line2">KusuNoKi<span class="hero__dot"></span></span>
+      </h1>
+
+      <p class="hero__desc" data-reveal="up">
+        冊子や Web を組み合わせた、物語のある謎解きをつくっています。<br>
+        11月祭（NF）での出展を中心に活動しているチームです。
+      </p>
+
+      <div class="btn-row hero__actions" data-reveal="up">
+        <a class="btn btn--light" href="#works">作品を見る</a>
+        <a class="btn btn--ghost" href="#about">私たちについて</a>
+      </div>
     </div>
 
-    <h1 class="kv__copy"><span class="visually-hidden">Team.KusuNoKi — </span>物語を、解く。</h1>
+    <!-- 最新作へのショートカット -->
+    <a class="hero__feature" href="/works/november-kyusai/">
+      <span class="hero__feature-thumb"><img src="/images/november/cover-yoi.jpg" alt="" width="1400" height="998"></span>
+      <span>
+        <span class="hero__feature-label">NOW PLAYING</span>
+        <span class="hero__feature-title">11月の救祭</span>
+        <span class="hero__feature-meta">2026 NF ／ 冊子 × Web</span>
+      </span>
+    </a>
 
-    <div class="wrap kv__foot">
-      <p class="kv__team">Team.KusuNoKi<span>KYOTO — STORY &times; MYSTERY</span></p>
-      <div class="kv__pager" role="tablist" aria-label="作品を切り替える">
-        <button type="button" role="tab" aria-selected="true" aria-label="11月の救祭"><span class="kv__no">01</span><span class="kv__bar"><i></i></span></button>
-        <button type="button" role="tab" aria-selected="false" aria-label="クスノキが枯れた日"><span class="kv__no">02</span><span class="kv__bar"><i></i></span></button>
-      </div>
+    <div class="wrap hero__foot" aria-hidden="true">
+      <p class="hero__foot-meta"><span>EST. 2025</span><span>KYOTO, JAPAN</span><span>STORY &times; MYSTERY &times; PLACE</span></p>
       <span class="hero__scroll">SCROLL</span>
     </div>
   </section>
 
-  <!-- ステートメント -->
-  <section class="sheet statement" aria-label="ステートメント">
-    <div class="wrap statement__inner">
-      <p class="label statement__label" data-reveal="up">STATEMENT</p>
-      <p class="statement__text" data-stagger="120">
-        <span data-reveal="up">京都の学生が、</span>
-        <span data-reveal="up">物語と謎で、</span>
-        <span data-reveal="up">キャンパスを<em>舞台</em>に変える。</span>
-      </p>
-      <p class="statement__sub" data-reveal="up">
-        Team.KusuNoKi は、冊子と Web を組み合わせた<br>物語のある謎解きをつくる制作チームです。
-      </p>
-    </div>
-  </section>
-
-  <!-- 01 WORKS -->
-  <section class="sheet sheet--ink" id="works">
-    <div class="wrap">
-      <div class="chapter">
-        <div class="chapter__no">
-          <p class="index-no">01</p>
-          <p class="label">WORKS</p>
-        </div>
-        <div>
-          <p class="chapter__eyebrow" data-reveal="up">Case files</p>
-          <h2 class="chapter__title" data-reveal="up">作品</h2>
-        </div>
-      </div>
-
-      <!-- 新作は先頭に .work-card を足し、旧作には .work-card--sub を付けます -->
-      <div class="work-cards">
-        <a class="work-card" href="/works/november-kyusai/" data-cursor="VIEW" data-reveal="up">
-          <span class="work-card__media">
-            <img src="/images/november/cover-yoi.jpg" alt="" width="1400" height="998" loading="lazy">
-            <span class="work-card__badge">NOW PLAYING</span>
-          </span>
-          <span class="work-card__info">
-            <span class="work-card__no">FILE.02</span>
-            <span class="work-card__title">11月の救祭</span>
-            <span class="work-card__meta">2026.11 ／ 冊子 × Web</span>
-          </span>
-        </a>
-        <a class="work-card work-card--sub" href="/works/kusunoki-ga-kareta-hi" data-cursor="VIEW" data-reveal="up">
-          <span class="work-card__media">
-            <img src="/images/work-kusunoki.jpg" alt="" loading="lazy">
-          </span>
-          <span class="work-card__info">
-            <span class="work-card__no">FILE.01</span>
-            <span class="work-card__title">クスノキが枯れた日</span>
-            <span class="work-card__meta">2025.11 ／ 冊子 × Web ／ 約80分</span>
-          </span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- 02 NEWS -->
+  <!-- 01 NEWS -->
   <section class="sheet sheet--grid" id="news">
     <div class="wrap">
       <div class="chapter">
         <div class="chapter__no">
-          <p class="index-no">02</p>
+          <p class="index-no">01</p>
           <p class="label">NEWS</p>
         </div>
         <div>
@@ -234,12 +177,12 @@
     </div>
   </section>
 
-  <!-- 03 ABOUT（概要） -->
+  <!-- 02 ABOUT（概要） -->
   <section class="sheet sheet--ink" id="about">
     <div class="wrap">
       <div class="chapter">
         <div class="chapter__no">
-          <p class="index-no">03</p>
+          <p class="index-no">02</p>
           <p class="label">ABOUT</p>
         </div>
         <div>
@@ -248,12 +191,12 @@
         </div>
       </div>
 
-      <div class="about-split">
-        <figure class="about-split__photo" data-reveal="left">
-          <img src="/images/november/clocktower.jpg" alt="京都大学の時計台" loading="lazy">
-          <figcaption>KYOTO UNIVERSITY — YOSHIDA CAMPUS</figcaption>
-        </figure>
-        <div class="about-split__body" data-reveal="right">
+      <p class="about-statement" data-reveal="up">
+        京都大学の学生が集まって、<br><span class="em">謎解き</span>をつくっています。
+      </p>
+
+      <div class="about-lead" data-stagger="70">
+        <div data-reveal="up">
           <h3>なりたち</h3>
           <p>
             Team.KusuNoKi は、謎解きが好きな京都大学の学生が集まってできた制作チームです。
@@ -261,13 +204,14 @@
             企画、謎制作、デザイン、Web など、
             それぞれの得意分野を持ち寄って作品をつくっています。
           </p>
-          <dl class="facts" data-stagger="90">
-            <div data-reveal="up"><dt>FOUNDED</dt><dd>2025</dd></div>
-            <div data-reveal="up"><dt>MEMBERS</dt><dd>6<small>人</small></dd></div>
-            <div data-reveal="up"><dt>WORKS</dt><dd>2<small>作品</small></dd></div>
-          </dl>
         </div>
       </div>
+
+      <dl class="facts" data-stagger="90">
+        <div data-reveal="up"><dt>FOUNDED</dt><dd>2025</dd></div>
+        <div data-reveal="up"><dt>MEMBERS</dt><dd>6<small>人</small></dd></div>
+        <div data-reveal="up"><dt>WORKS</dt><dd>2<small>作品</small></dd></div>
+      </dl>
 
       <ul class="points" data-stagger="110">
         <li data-reveal="up">
@@ -296,6 +240,64 @@
           <span>STORY &times; MYSTERY &times; PLACE —&nbsp;</span>
           <span>STORY &times; MYSTERY &times; PLACE —&nbsp;</span>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 WORKS -->
+  <section class="sheet sheet--grid" id="works">
+    <div class="wrap">
+      <div class="chapter">
+        <div class="chapter__no">
+          <p class="index-no">03</p>
+          <p class="label">WORKS</p>
+        </div>
+        <div>
+          <p class="chapter__eyebrow" data-reveal="up">Case files</p>
+          <h2 class="chapter__title" data-reveal="up">作品</h2>
+        </div>
+      </div>
+
+      <!-- 最新作。新作が出たら、この article の中身を差し替え、
+           旧作は下の .archive に1行足してください。 -->
+      <article class="feature-work">
+        <a class="feature-work__media" href="/works/november-kyusai/" data-reveal="left" tabindex="-1" aria-hidden="true">
+          <img src="/images/november/cover-yoi.jpg" alt="" width="1400" height="998" loading="lazy">
+          <span class="feature-work__badge">LATEST</span>
+        </a>
+
+        <div data-reveal="right">
+          <p class="case__label">WORKS / FILE.02 — 2026 NF</p>
+          <h3 class="case__title">
+            <span class="case__ruby">11月の</span>
+            <span class="case__name">救祭</span>
+          </h3>
+          <p class="case__text">
+            冊子と、スマートフォンの会話。ふたつを往復しながら、11月祭のキャンパスを歩く謎解きです。
+            ページで見つけた答えを会話へ送ると、次の手がかりが返ってきます。
+          </p>
+          <dl class="spec">
+            <div><dt>FORMAT</dt><dd>冊子 × Web</dd></div>
+            <div><dt>RELEASE</dt><dd>2026.11</dd></div>
+          </dl>
+          <div class="btn-row">
+            <a class="btn" href="/works/november-kyusai/">VIEW CASE FILE</a>
+          </div>
+        </div>
+      </article>
+
+      <div class="archive" data-reveal="up">
+        <div class="archive__head">
+          <p class="label">ARCHIVE</p>
+          <p class="label">01 FILE</p>
+        </div>
+        <a class="archive-item" href="/works/kusunoki-ga-kareta-hi">
+          <span class="archive-item__thumb"><img src="/images/work-kusunoki.jpg" alt="" loading="lazy"></span>
+          <span class="archive-item__no">FILE.01</span>
+          <span class="archive-item__title">クスノキが枯れた日</span>
+          <span class="archive-item__meta">2025.11 ／ 冊子 × Web ／ 約80分</span>
+          <span class="record__arrow" aria-hidden="true">↗</span>
+        </a>
       </div>
     </div>
   </section>
@@ -330,9 +332,9 @@
     <div class="site-footer__top">
       <p class="site-footer__word" aria-hidden="true"><em>Team.</em>KusuNoKi<span class="hero__dot"></span></p>
       <ul class="footer-nav">
-        <li><a href="#works">作品</a></li>
         <li><a href="#news">お知らせ</a></li>
         <li><a href="#about">概要</a></li>
+        <li><a href="#works">作品</a></li>
         <li><a href="/works/november-kyusai/">11月の救祭</a></li>
         <li><a href="#contact">お問い合わせ</a></li>
       </ul>
