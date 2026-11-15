@@ -784,6 +784,14 @@ a.record:active { background: rgba(28, 27, 25, 0.09); }
   font-size: 0.82rem;
   letter-spacing: 0.04em;
 }
+.spec-note {
+  margin: 10px 0 0;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  line-height: 1.7;
+  letter-spacing: 0.04em;
+  color: var(--on-paper-dim);
+}
 
 /* ---------------------------------------------------------
    引用（プロローグ）
@@ -2410,8 +2418,9 @@ body.sales-page {
   line-height: 1.85;
   margin-bottom: 18px;
 }
-.sales-stage .spec { margin-bottom: 18px; }
+.sales-stage .spec { margin-bottom: 0; }
 .sales-stage .spec > div { padding: 12px 16px; }
+.sales-stage .spec-note { margin: 10px 0 18px; }
 .sales-stage .btn-row { margin: 0; }
 
 .sales-stage .book-stack {
@@ -2472,12 +2481,17 @@ body.sales-page {
 }
 
 .play-dialog {
-  /* UA既定のabsoluteはドキュメント基準でずれる環境があるため、
-     ビューポート基準のfixedで中央に固定する */
+  /* inset+margin:auto は transform アニメと組み合わさると、
+     2回目以降の open でモバイル表示がずれるため、
+     top/left 50% + translate(-50%, -50%) で中央固定する */
   position: fixed;
-  inset: 0;
-  margin: auto;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  margin: 0;
   width: min(440px, calc(100vw - 32px));
+  max-width: calc(100vw - 32px);
   max-height: calc(100svh - 48px);
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -2487,7 +2501,7 @@ body.sales-page {
   background: var(--paper);
   color: var(--on-paper);
   opacity: 0;
-  transform: translateY(18px) scale(.96);
+  transform: translate(-50%, calc(-50% + 18px)) scale(.96);
   transition:
     opacity .42s cubic-bezier(.16, 1, .3, 1),
     transform .42s cubic-bezier(.16, 1, .3, 1),
@@ -2496,14 +2510,18 @@ body.sales-page {
 }
 .play-dialog[open] {
   opacity: 1;
-  transform: none;
+  transform: translate(-50%, -50%) scale(1);
   animation: dialog-in .42s cubic-bezier(.16, 1, .3, 1);
 }
 @keyframes dialog-in {
-  from { opacity: 0; transform: translateY(18px) scale(.96); }
+  from { opacity: 0; transform: translate(-50%, calc(-50% + 18px)) scale(.96); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
 @starting-style {
-  .play-dialog[open] { opacity: 0; transform: translateY(18px) scale(.96); }
+  .play-dialog[open] {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 18px)) scale(.96);
+  }
 }
 .play-dialog::backdrop {
   background: rgba(28, 27, 25, 0);

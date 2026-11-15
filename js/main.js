@@ -328,6 +328,9 @@
       if (text) text.textContent = playable ? openText : closedText;
       if (enter) enter.hidden = !playable;
 
+      // 2回目以降も同じ位置に出すため、前回のスクロール残と開閉中の再入を防ぐ
+      if (dialog.open) dialog.close();
+      dialog.scrollTop = 0;
       dialog.showModal();
     });
 
