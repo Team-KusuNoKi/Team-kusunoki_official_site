@@ -2401,6 +2401,9 @@ body.sales-page {
   display: flex;
   align-items: center;
   padding: 20px 0;
+  /* 冊子が右へ滑り出す変形を、ページの横スクロール幅に含めない。
+     clip は縦スクロールの入れ子を作らないので、画面の縦移動はそのまま。 */
+  overflow-x: clip;
 }
 .sales-stage .case__body {
   grid-template-columns: auto minmax(0, 1fr);
