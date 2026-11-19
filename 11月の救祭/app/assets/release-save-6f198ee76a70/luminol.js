@@ -1,5 +1,5 @@
 export function mountLuminol(host, { onDone, canInteract } = {}) {
-  host.innerHTML = `<section class="hex-game luminol-game" aria-label="ルミノール検査"><div class="hex-layout"><section class="hex-rules"><div class="luminol-rules-bar"><h2>手順</h2><button type="button" class="hex-reset primary-button">やり直す</button></div><p><span data-rule="mix">①二つの小瓶を一つに混ぜる。</span><br><span data-rule="spray">②トンカチの赤い部分へ吹きかける。</span><br><span data-rule="lights">③電気を消す。</span></p></section><section class="hex-board" aria-label="検査"><div class="luminol-stage" data-phase="mix"><div class="luminol-scene"><div class="luminol-hammer-wrap" data-zoom><div class="luminol-zoom"><div class="luminol-hammer-3d"><img class="luminol-hammer-art" src="./assets/release-save-6f198ee76a70/assets/luminol-hammer-solid.png" alt="" aria-hidden="true" draggable="false"></div><div class="luminol-hit luminol-stain" data-drop="stain"></div><span class="luminol-mist" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></div><button type="button" class="luminol-switch" aria-pressed="false" aria-label="電気を消す"><span class="luminol-switch-plate" aria-hidden="true"><span class="luminol-switch-lever"></span></span><span class="luminol-vial-name">電気</span></button><div class="luminol-zoom-controls"><button type="button" data-zoom-in aria-label="拡大">+</button><button type="button" data-zoom-out aria-label="縮小">−</button></div></div><div class="luminol-foreground"><button type="button" class="luminol-vial" data-vial="base" aria-label="ルミノール。酸化剤の小瓶へドラッグするか、決定で混ぜる"><span class="luminol-vial-neck" aria-hidden="true"></span><span class="luminol-vial-body"><span class="luminol-vial-liquid"></span></span><span class="luminol-vial-name">ルミノール</span></button><button type="button" class="luminol-vial is-reagent" data-vial="reagent" aria-label="酸化剤。ルミノールの小瓶へドラッグするか、決定で混ぜる"><span class="luminol-vial-neck" aria-hidden="true"></span><span class="luminol-vial-body"><span class="luminol-vial-liquid"></span></span><span class="luminol-vial-name">酸化剤</span></button><button type="button" class="luminol-spray" data-drag="spray" aria-label="噴霧器。トンカチの赤い部分へドラッグするか、決定で吹きかける"><span class="luminol-spray-body" aria-hidden="true"><span class="luminol-spray-nozzle"></span><span class="luminol-spray-trigger"></span><span class="luminol-spray-liquid"></span></span><span class="luminol-vial-name">噴霧器</span></button></div><div class="luminol-result" hidden><p>何も光らない。</p><p>この赤い液体は、血ではない。</p><button type="button" class="primary-button" data-done>確認した</button></div></div></div></section></div><p class="hex-status" role="status" aria-live="polite"></p></section>`;
+  host.innerHTML = `<section class="hex-game luminol-game" aria-label="ルミノール検査"><div class="hex-layout"><section class="hex-rules"><div class="luminol-rules-bar"><h2>手順</h2><button type="button" class="hex-reset primary-button">やり直す</button></div><p><span data-rule="mix">①二つの小瓶を一つに混ぜる。</span><br><span data-rule="spray">②トンカチの赤い部分へ吹きかける。</span><br><span data-rule="lights">③電気を消す。</span></p></section><section class="hex-board" aria-label="検査"><div class="luminol-stage" data-phase="mix"><div class="luminol-scene"><div class="luminol-hammer-wrap" data-zoom><div class="luminol-zoom"><div class="luminol-hammer-3d"><img class="luminol-hammer-art" src="./assets/release-save-6f198ee76a70/assets/luminol-hammer-solid.png" alt="" aria-hidden="true" draggable="false"></div><div class="luminol-hit luminol-stain" data-drop="stain"></div></div><button type="button" class="luminol-switch" aria-pressed="false" aria-label="電気を消す"><span class="luminol-switch-plate" aria-hidden="true"><span class="luminol-switch-lever"></span></span><span class="luminol-vial-name">電気</span></button><div class="luminol-zoom-controls"><button type="button" data-zoom-in aria-label="拡大">+</button><button type="button" data-zoom-out aria-label="縮小">−</button></div></div><div class="luminol-foreground"><button type="button" class="luminol-vial" data-vial="base" aria-label="ルミノール。酸化剤の小瓶へドラッグするか、決定で混ぜる"><span class="luminol-vial-neck" aria-hidden="true"></span><span class="luminol-vial-body"><span class="luminol-vial-liquid"></span></span><span class="luminol-vial-name">ルミノール</span></button><button type="button" class="luminol-vial is-reagent" data-vial="reagent" aria-label="酸化剤。ルミノールの小瓶へドラッグするか、決定で混ぜる"><span class="luminol-vial-neck" aria-hidden="true"></span><span class="luminol-vial-body"><span class="luminol-vial-liquid"></span></span><span class="luminol-vial-name">酸化剤</span></button><button type="button" class="luminol-spray" data-drag="spray" aria-label="噴霧器。トンカチの赤い部分へドラッグするか、決定で吹きかける"><span class="luminol-spray-body" aria-hidden="true"><span class="luminol-spray-nozzle"></span><span class="luminol-spray-trigger"></span><span class="luminol-spray-liquid"></span></span><span class="luminol-vial-name">噴霧器</span></button></div><div class="luminol-result" hidden><p>何も光らない。</p><p>この赤い液体は、血ではない。</p><button type="button" class="primary-button" data-done>確認した</button></div></div></div></section></div><p class="hex-status" role="status" aria-live="polite"></p></section>`;
 
   const root = host.querySelector('.luminol-game');
   const stage = root.querySelector('.luminol-stage');
@@ -19,6 +19,7 @@ export function mountLuminol(host, { onDone, canInteract } = {}) {
     result: '何も光りません。この赤い液体は血ではありません。',
   };
   let phase = 'mix';
+  let hasSprayed = false;
   let busy = false;
   let disposed = false;
   let timer = null;
@@ -35,7 +36,7 @@ export function mountLuminol(host, { onDone, canInteract } = {}) {
   }
   function render() {
     stage.dataset.phase = phase;
-    const step = phase === 'result' ? 'lights' : phase;
+    const step = phase === 'result' || hasSprayed ? 'lights' : phase;
     root.querySelectorAll('[data-rule]').forEach(el => {
       el.setAttribute('aria-current', el.dataset.rule === step ? 'step' : 'false');
     });
@@ -69,7 +70,7 @@ export function mountLuminol(host, { onDone, canInteract } = {}) {
   }
   let sprayedRed = false;
   function sprayAt(clientX, clientY) {
-    if (phase === 'mix' || !allowed() || talkMode) return;
+    if (phase !== 'spray' || !allowed() || talkMode) return;
     const stainRect = stainTarget.getBoundingClientRect();
     const pad = 4;
     if (clientX >= stainRect.left - pad && clientX <= stainRect.right + pad && clientY >= stainRect.top - pad && clientY <= stainRect.bottom + pad) {
@@ -83,10 +84,11 @@ export function mountLuminol(host, { onDone, canInteract } = {}) {
     for (let i = 0; i < 9; i += 1) burst.append(document.createElement('i'));
     viewport.append(burst);
     stain.classList.add('is-wet');
+    if (!hasSprayed) { hasSprayed = true; status.textContent = messages.lights; render(); }
     setTimeout(() => burst.remove(), 700);
   }
   function finishSpray(clientX, clientY) {
-    if (phase === 'mix' || !allowed()) return;
+    if (phase !== 'spray' || !allowed()) return;
     const rect = stainTarget.getBoundingClientRect();
     sprayAt(clientX ?? rect.left + rect.width / 2, clientY ?? rect.top + rect.height / 2);
   }
@@ -103,7 +105,8 @@ export function mountLuminol(host, { onDone, canInteract } = {}) {
     clearTimer();
     busy = false;
     phase = 'mix';
-    stage.classList.remove('is-dark', 'is-spraying');
+    hasSprayed = false;
+    stage.classList.remove('is-dark');
     viewport?.querySelectorAll('.luminol-burst').forEach(node => node.remove());
     sprayedRed = false;
     closeTalk();

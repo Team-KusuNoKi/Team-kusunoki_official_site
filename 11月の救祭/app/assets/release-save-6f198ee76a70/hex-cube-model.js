@@ -27,8 +27,9 @@ const MINIGAME_ENTRIES = new Set([HEX_CUBE_ID, 'luminol']);
 export function readMinigameEntry(value) {
   if(typeof value!=='string'||!value)return null;
   try {
-    const url=new URL(value),path=decodeURIComponent(url.pathname);
-    const id=url.searchParams.get('minigame');
+    const url=new URL(value),id=url.searchParams.get('minigame');
+    let path=decodeURIComponent(url.pathname).replace(/index\.html$/,'');
+    if(!path.endsWith('/'))path+='/';
     return ['/11月の救祭/app/','/app/'].includes(path)&&MINIGAME_ENTRIES.has(id)?id:null;
   } catch {return null;}
 }

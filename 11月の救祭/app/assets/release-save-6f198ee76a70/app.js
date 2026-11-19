@@ -57,7 +57,6 @@ let expandedCharacter = null;
 let expandedClueId = null;
 let seenClueIds = new Set();
 let combineSelection = [];
-let combineReplaceAt = null;
 let combinePicker = false;
 let combineSelecting = false;
 let combineSuppressCard = null;
@@ -605,12 +604,6 @@ function holdSceneNarration() {
   render();
 }
 
-function q9NarrationOnly() {
-  const start = latestSceneStart(state.messages, 'Q9');
-  const lines = state.messages.slice(start).filter(m => m.problemId === 'Q9' && m.kind === 'dialogue' && !isSceneNotice(m));
-  return lines.length > 0 && lines.every(m => !m.speaker && !m.scene);
-}
-
 function advanceNovel(remaining = pendingConversation(state, { isPlaying, sceneStart, displayedMessages })) {
   // 背景付きの結末は、読み終えても吹き出しの一覧に戻さない。
   // Q9はルートAと同じ暗転を挟んでから冥の終幕へ進む。
@@ -827,11 +820,6 @@ const icons = {
   home: '<path d="m3 11 9-8 9 8M5 10v11h5v-7h4v7h5V10"/>',
   info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v1"/>',
   chevron: '<path d="m6 9 6 6 6-6"/>',
-  'question-circle': '<circle cx="12" cy="12" r="8"/>',
-  'question-cross': '<path d="m6 6 12 12M18 6 6 18"/>',
-  'question-triangle': '<path d="M12 4 21 20H3Z"/>',
-  'question-square': '<rect x="4" y="4" width="16" height="16"/>',
-
 };
 const icon = name => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[name] ?? ''}</svg>`;
 const esc = value => String(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -1373,7 +1361,6 @@ function closePanel() {
   hintContext = null;
   if (panel.classList.contains('clue-gallery') && combinePicker) {
     combinePicker = false;
-    combineReplaceAt = null;
     openPanel('clues');
     animateFade(panel.querySelector('#clue-tab-content'), true, MOTION.state);
     return;
@@ -1655,12 +1642,11 @@ async function beginPlay(kind, code = '', { automatic = false } = {}) {
 }
 
 function travelGuideMarkup(guide, problemId) {
-  const placeholder = guide.placeholder ? '<span class="travel-guide-placeholder">仮の写真</span>' : '';
   return `<div class="travel-guide-gallery" role="region" aria-label="${esc(guide.destination)}の写真、全${guide.steps.length}枚。横スクロールで確認できます" tabindex="0">${guide.steps.map((step, index) => `
     <figure class="travel-guide-photo">
       <div class="travel-guide-step"><span>${index + 1}</span>${esc(step.title)}</div>
       <button type="button" class="travel-guide-image" data-action="travel-image" data-id="${esc(problemId)}" data-index="${index}" aria-label="${esc(guide.destination)}の案内写真${index + 1}を拡大表示" aria-haspopup="dialog">
-        <img src="${esc(step.preview)}" alt="${esc(step.imageAlt)}" decoding="async">${placeholder}
+        <img src="${esc(step.preview)}" alt="${esc(step.imageAlt)}" decoding="async">
         <span class="travel-guide-zoom" aria-hidden="true">タップして拡大</span>
       </button>
       <figcaption class="travel-guide-copy">${esc(step.directions)}</figcaption>
@@ -1744,7 +1730,6 @@ function pageTurnCardMarkup(text = '次の問題を見つけたらページを�
 
 function messageMarkup(m) {
   if (m.scene) return '';
-  if (m.problemId === 'Q9' && !m.speaker && q9NarrationOnly()) return '';
   const problem = scenario.problems.find(p => p.id === m.problemId);
   // 写真と案内は現行データから表示し、以前の保存記録にも適用する。
   const guide = problem?.travelGuide;
@@ -2301,7 +2286,7 @@ function yoiCompletionMarkup() {
 function meiCompletionMarkup() {
   const clearPostUrl = CLEAR_POST_URL[meiEndRoute] ?? '';
   const clearPostNote = clearPostUrl ? `<p class="yoi-completion-follow">今後の参考にするためアンケートにご協力ください。（1分）</p><p class="yoi-completion-follow">ご回答いただいた方には、ささやかなお礼として、制作の裏話を綴ったあとがきを公開しております。</p><p class="yoi-completion-follow yoi-completion-replay">メニューバーから再度Q9をプレイ可能です。</p>` : '';
-  return `<section class="yoi-completion mei-completion" aria-labelledby="mei-completion-title" data-mei-ending="${esc(meiEndRoute)}">
+  return `<section class="yoi-completion mei-completion" aria-labelledby="mei-completion-title" data-mei-ending="${esc(meiEndRoute ?? '')}">
     <div class="yoi-completion-copy"><p class="yoi-completion-label">11月の救祭</p><h1 id="mei-completion-title" tabindex="-1">冥</h1><p class="yoi-completion-end">終幕</p><p>「11月の救祭 冥」はここで終了です。<br>遊んでいただきありがとうございました。</p>${clearPostMarkup(clearPostUrl)}${clearPostNote}</div>
     <div class="yoi-completion-actions" role="group" aria-label="終了後の案内">
       <button class="primary-button" data-action="mei-survey"><span>アンケートに答える</span></button>
@@ -2493,15 +2478,14 @@ function render({ scroll = false, peelingConclusions = [] } = {}) {
   const lastMessage = displayedMessages.at(-1);
   const lastScene = scenario.problems.find(item => item.id === lastMessage?.problemId);
   const storyBackdrop = !isPlaying && hasStoryPageTurn(lastScene);
-  const heldNarration = !isPlaying && p.id === 'Q9' && q9NarrationOnly();
   // めくり暗転で締まる場面は、背景に案内を残さず最後の台詞だけを出す。
   const transcript = characterScene ? displayedMessages.filter(message =>
-    isSceneNotice(message) && !storyBackdrop) : heldNarration ? [] : displayedMessages;
+    isSceneNotice(message) && !storyBackdrop) : displayedMessages;
   const lastStoryLine = storyBackdrop && (lastScene === sceneProblem || !transcript.length)
     ? displayedMessages.findLast(m => m.problemId === lastScene.id && m.kind === 'dialogue' && !isSceneNotice(m)) : null;
   // 案内のない会話は、読了後も最後の台詞を表示する。
   const closingAvailable = canReadInvestigationClosing();
-  const novel = !showBoard && (isPlaying ? novelPlayback : heldNarration || completionPending || deferredPageTurn || lastStoryLine || closingAvailable || characterScene && !transcript.length && !sceneProblem.instruction);
+  const novel = !showBoard && (isPlaying ? novelPlayback : completionPending || deferredPageTurn || lastStoryLine || closingAvailable || characterScene && !transcript.length && !sceneProblem.instruction);
   const novelLine = completionPending
     ? displayedMessages.findLast(m => m.problemId === p.id && m.speaker) ?? p.dialogue.findLast(m => m.speaker)
     : lastStoryLine || lastMessage;
@@ -2674,7 +2658,6 @@ function switchClueTab(nextTab) {
   expandedCharacter = null;
   expandedClueId = null;
   combinePicker = false;
-  combineReplaceAt = null;
   if (nextTab === 'combine') combineSelecting = false;
   haptics.trigger();
   const previousTab = panel.querySelector('.clue-tabs [aria-selected="true"]')?.getBoundingClientRect?.();
@@ -2732,7 +2715,6 @@ function allPlayCards() {
 function clearCombineSelecting() {
   combineSelecting = false;
   combineSelection = [];
-  combineReplaceAt = null;
 }
 
 // 長押しの指を離したときに発生する click を、その指が置かれていたカードに限って一度だけ無効化する。
@@ -3182,16 +3164,6 @@ function animateCardFrom(element, sourceRect) {
   });
 }
 
-function closeCharacterPreview() {
-  const index = expandedCharacter;
-  const sourceRect = cardImageRect(panel.querySelector('.clue-gallery-card[aria-current="true"]'));
-  expandedCharacter = null;
-  openPanel('clues');
-  const tile = panel.querySelector(`[data-action="character-open"][data-index="${index}"]`);
-  tile?.focus({ preventScroll: true });
-  animateCardFrom(tile, sourceRect);
-}
-
 function hexEntryOpensReward(id) {
   return playSaves.getStatus().mode !== 'debug' && state.minigames?.includes(id);
 }
@@ -3266,7 +3238,7 @@ function ensureHexSuccessCss() {
   const link = document.createElement('link');
   link.rel = 'stylesheet';
   // app/index.html からの相対パス。テストVMでは import.meta が使えない。
-  link.href = '../hex-success.css';
+  link.href = './assets/release-save-6f198ee76a70/hex-success.css';
   link.dataset.hexSuccessCss = '1';
   document.head.appendChild(link);
 }
@@ -4318,8 +4290,8 @@ document.addEventListener('click', event => {
   if ((!event.target.closest('.navigation-menu') && !event.target.closest('#navigation-menu')) || event.target.closest('.menu-items [data-action]')) setMenuExpanded(false);
   if (!event.target.closest('.problem-navigation')) setProblemMenuExpanded(false);
   if (!button) return;
-  if (['toggle-menu', 'toggle-problems', 'open-composer', 'travel-found', 'select', 'investigation-closing', 'investigation-back', 'investigation-next', 'investigation-open', 'yoi-next', 'yoi-end', 'yoi-page-turn', 'mei-end', 'mei-survey', 'continue-at-venue', 'continue-online', 'play-mei', 'end-play', 'tour-thanks', 'tour-survey', 'history', 'history-back', 'hints', 'hex-hints', 'clues', 'chat', 'trouble', 'save-info', 'save-delete-confirm', 'puzzle-image', 'travel-image', 'answer-choices', 'symbol-slot', 'continue-conversation', 'next', 'replay', 'branch', 'start', 'start-answer-confirm', 'confirm-reset', 'puzzle-page', 'ritual-guide', 'ritual-guide-page', 'image-zoom-in', 'image-zoom-out', 'image-zoom-reset', 'hex-open', 'hex-replay', 'replay-q9', 'hex-card', 'hex-save-retry', 'luminol-open', 'save-continue', 'save-new', 'save-start', 'save-entry', 'save-retry', 'save-delete', 'hint-answer', 'hint-answer-cancel'].includes(action)) haptics.trigger();
-  if (['close', 'close-menu', 'save-entry-back'].includes(action)) haptics.trigger('dismiss');
+  if (['toggle-menu', 'toggle-problems', 'open-composer', 'travel-found', 'select', 'investigation-closing', 'investigation-back', 'investigation-next', 'investigation-open', 'yoi-next', 'yoi-end', 'yoi-page-turn', 'mei-end', 'mei-survey', 'continue-at-venue', 'continue-online', 'play-mei', 'tour-thanks', 'tour-survey', 'history', 'history-back', 'hints', 'hex-hints', 'clues', 'chat', 'trouble', 'save-info', 'save-delete-confirm', 'puzzle-image', 'travel-image', 'answer-choices', 'symbol-slot', 'continue-conversation', 'branch', 'start', 'start-answer-confirm', 'confirm-reset', 'puzzle-page', 'ritual-guide', 'ritual-guide-page', 'image-zoom-in', 'image-zoom-out', 'image-zoom-reset', 'hex-open', 'hex-replay', 'replay-q9', 'hex-card', 'hex-save-retry', 'luminol-open', 'save-continue', 'save-new', 'save-start', 'save-entry', 'save-delete', 'hint-answer', 'hint-answer-cancel'].includes(action)) haptics.trigger();
+  if (action === 'close') haptics.trigger('dismiss');
   if (action === 'hex-open') { if (!hexEntryLocked()) openHexCube(); return; }
   if (action === 'hex-hints') { hintContext = 'hex-cube'; openPanel('hints'); return; }
   if (action === 'luminol-open') { void openLuminol(); return; }
@@ -4349,7 +4321,6 @@ document.addEventListener('click', event => {
     return;
   }
   else if (action === 'save-new') { if (localRecord || legacyState || playSaves.getRecord()?.code && playSaves.getRecord().code !== '000000') { gateError = ''; renderEntry(); openPanel('reset'); } else void beginPlay('new'); return; }
-  else if (action === 'save-entry-back') { closePanel(); return; }
   else if (action === 'save-start') {
     if (playSaves.getStatus().phase === 'conflict') return;
     // 開始直後は使い方案内だけを見せ、N1の回答欄は「次へ」から開く。
@@ -4366,7 +4337,7 @@ document.addEventListener('click', event => {
       checkIcon: icon('check'), copyIcon: icon('copy'), reduced: reducedMotion(), onSuccess: () => haptics.trigger() });
     return;
   }
-  else if (action === 'save-title' || (action === 'end-play' && yoiEndView)) {
+  else if (action === 'save-title') {
     save(); conversationPlayer.stop(); isPlaying = false; closePanel();
     gateVisible = true; gateInput = false; gateError = ''; gateCode = ''; gateDigits = Array(6).fill('');
     const leavingDebug = playSaves.getStatus().mode === 'debug';
@@ -4379,7 +4350,6 @@ document.addEventListener('click', event => {
   else if (action === 'save-entry') {
     save(); conversationPlayer.stop(); isPlaying = false; closePanel(); gateVisible = true; gateInput = true; gateError = ''; gateCode = ''; gateDigits = Array(6).fill(''); playSaves.leaveSession(); localRecord = playSaves.readLocal(); renderEntry(); return;
   }
-  else if (action === 'save-retry') { void playSaves.retry().then(() => openPanel('save-info')).catch(error => { gateError = error.message; openPanel('save-info'); }); return; }
   else if (action === 'save-delete') {
     if (saveMutationBusy) return;
     saveMutationBusy = true;
@@ -4398,7 +4368,6 @@ document.addEventListener('click', event => {
     investigationScrollTop = document.querySelector('.chat-area').scrollTop;
     selectProblem(scenario.investigation.next, { answering: true });
   }
-  else if (action === 'close-menu') setMenuExpanded(false);
   else if (action === 'toggle-problems') setProblemMenuExpanded(!problemMenuExpanded);
   else if (action === 'history') openHistoryScreen();
   else if (action === 'history-back') closeHistoryScreen();
@@ -4569,9 +4538,6 @@ document.addEventListener('click', event => {
     panel.querySelector('.clue-carousel')?.focus({ preventScroll: true });
     animateCardFrom(panel.querySelector('.clue-gallery-card[aria-current="true"]'), sourceRect);
   }
-  else if (action === 'character-dismiss' && !event.target.closest('.clue-gallery-card')) {
-    closeCharacterPreview();
-  }
   else if (action === 'clue-card-open' && (clueTab === 'cards' || (clueTab === 'characters' && combineSelecting))) {
     if (combineClickSuppressed(button.dataset.id)) {
       combineSuppressCard = null;
@@ -4605,23 +4571,14 @@ document.addEventListener('click', event => {
   }
   else if (action === 'combine-pick' && clueTab === 'combine' && combineUnlocked()) {
     combinePicker = true;
-    combineReplaceAt = null;
     haptics.trigger();
     openPanel('clues');
     animateSurface(panel.querySelector('.combine-picker'), true, 24);
-  }
-  else if (action === 'combine-picker-close' && combinePicker) {
-    combinePicker = false;
-    combineReplaceAt = null;
-    haptics.trigger();
-    openPanel('clues');
-    animateFade(panel.querySelector('#clue-tab-content'), true, MOTION.state);
   }
   else if (action === 'combine-toggle' && combinePicker) {
     const id = button.dataset.id;
     if (!allPlayCards().some(card => card.id === id)) return;
     placeCombineCard(id);
-    combineReplaceAt = null;
     haptics.trigger();
     refreshCombineSelection(id);
   }
@@ -4647,7 +4604,6 @@ document.addEventListener('click', event => {
     const ids = [...combineSelection];
     const returnTab = clueTab;
     combinePicker = false;
-    combineReplaceAt = null;
     combineSelecting = false;
     applyCombineResult(ids, returnTab);
   }
@@ -4656,7 +4612,6 @@ document.addEventListener('click', event => {
     const returnTab = clueTab;
     combineSelecting = false;
     combinePicker = false;
-    combineReplaceAt = null;
     expandedClueId = null;
     expandedCharacter = null;
     applyCombineResult(ids, returnTab);
@@ -4727,8 +4682,6 @@ document.addEventListener('click', event => {
     advanceNovel();
     haptics.trigger(panel.open && panel.classList.contains('page-turn-dialog') ? 'pageTurn' : 'dialogue');
   }
-  else if (action === 'replay' && !isPlaying) playConversation(latestSceneStart(state.messages, state.selected));
-  else if (action === 'next' && !isPlaying) { composerExpanded = false; selectProblem(followingProblem(current())?.id); }
   else if (action === 'branch' && !isPlaying) {
     const start = state.messages.length;
     const next = chooseBranch(scenario, state, state.selected, button.dataset.id);
@@ -4808,7 +4761,7 @@ document.addEventListener('keydown', event => {
 for (const name of ['input', 'change']) {
   document.addEventListener(name, event => {
     if (name === 'change' && event.target.matches?.('input[type="checkbox"]') && event.target.closest?.('#answer-form')) capMultiSelection(event.target);
-    if (name === 'change' && event.target.matches?.('select, input[type="radio"], input[type="checkbox"]') && event.target.closest('#answer-form, #combine-form')) haptics.trigger();
+    if (name === 'change' && event.target.matches?.('select, input[type="radio"], input[type="checkbox"]') && event.target.closest('#answer-form')) haptics.trigger();
     if (event.target.closest('#answer-form')) { setAnswerError(false); updateAnswerReadiness({ feedback: true }); rememberAnswerDraft(); save(); }
     if (name === 'input' && event.target.dataset?.resumeDigit !== undefined && !event.isComposing) setResumeDigits(Number(event.target.dataset.resumeDigit), event.target.value);
   });
@@ -5010,10 +4963,6 @@ document.addEventListener('submit', event => {
     setTimeout(() => { if (submit?.isConnected) { submit.disabled = false; submit.removeAttribute('aria-busy'); } }, 350);
     const data = new FormData(event.target);
     answer(current().type === 'text' ? data.get('answer') : data.getAll('answer'));
-  } else if (event.target.id === 'combine-form') {
-    event.preventDefault();
-    if (event.target.inert) return;
-    applyCombineResult(new FormData(event.target).getAll('card'));
   }
 });
 panel.addEventListener('click', event => { const rect = panel.getBoundingClientRect(); if (event.target === panel && (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom)) { haptics.trigger('dismiss'); closePanel(); } });

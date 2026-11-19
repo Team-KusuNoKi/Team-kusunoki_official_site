@@ -495,7 +495,6 @@ html:has(.chat-area.investigation-hub) { overscroll-behavior: none; }
 .travel-guide-image { position: relative; display: block; width: 100%; padding: 0; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 10px; background: #e7e0d5; cursor: zoom-in; }
 .travel-guide-image:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 3px; }
 .travel-guide-image img { display: block; width: 100%; height: 100%; object-fit: contain; }
-.travel-guide-placeholder { position: absolute; top: 8px; left: 8px; padding: 2px 8px; border-radius: 999px; background: #fffaf2ed; color: #65543e; font-size: 9px; }
 .travel-guide-zoom { position: absolute; right: 5px; bottom: 5px; padding: 2px 5px; border-radius: 4px; background: #202020bd; color: var(--white); font-size: 9px; line-height: 1.4; pointer-events: none; }
 .trouble-guide-heading { margin: 0 0 16px; padding: 18px 18px 16px; border-radius: 18px; background: var(--white); }
 .trouble-guide-heading h3 { margin: 0; font-size: 18px; font-weight: 700; line-height: 1.45; letter-spacing: .04em; }
@@ -1614,26 +1613,6 @@ dialog.hex-reward-panel::backdrop { background: #d5e0e8; }
   position: absolute; left: 32%; top: 10%; width: 11%; height: 14%; border-radius: 40%;
 }
 .luminol-hit.is-armed { outline: 2px dashed var(--accent-ink); outline-offset: 2px; }
-.luminol-mist { position: absolute; left: 16%; top: 10%; width: 42%; height: 30%; pointer-events: none; }
-.luminol-mist i {
-  position: absolute; width: 54px; height: 54px; border-radius: 50%; opacity: 0;
-  background: radial-gradient(circle, #ffffff 0%, #eceae4d0 46%, #ffffff00 74%);
-  filter: blur(0.4px);
-}
-.luminol-stage.is-spraying .luminol-mist i { animation: luminol-mist 1100ms ease-out both; }
-.luminol-mist i:nth-child(1) { left: 8%; top: 28%; }
-.luminol-mist i:nth-child(2) { left: 28%; top: 12%; animation-delay: 50ms; }
-.luminol-mist i:nth-child(3) { left: 46%; top: 34%; width: 48px; height: 48px; animation-delay: 90ms; }
-.luminol-mist i:nth-child(4) { left: 18%; top: 48%; animation-delay: 130ms; }
-.luminol-mist i:nth-child(5) { left: 58%; top: 18%; width: 42px; height: 42px; animation-delay: 40ms; }
-.luminol-mist i:nth-child(6) { left: 38%; top: 52%; animation-delay: 170ms; }
-.luminol-mist i:nth-child(7) { left: 66%; top: 42%; animation-delay: 110ms; }
-@keyframes luminol-mist {
-  0% { opacity: 0; transform: translate(42px, 14px) scale(.2); }
-  16% { opacity: .95; }
-  62% { opacity: .8; transform: translate(-4px, -6px) scale(1.25); }
-  100% { opacity: 0; transform: translate(-16px, -10px) scale(1.6); }
-}
 .luminol-burst { position: absolute; z-index: 3; width: 0; height: 0; pointer-events: none; }
 .luminol-burst i {
   position: absolute; left: 0; top: 0; width: 44px; height: 44px; margin: -22px 0 0 -22px;
