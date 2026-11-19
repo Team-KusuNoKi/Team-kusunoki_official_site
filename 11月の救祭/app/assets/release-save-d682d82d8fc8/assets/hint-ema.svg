@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 386" fill="none">
+  <defs>
+    <clipPath id="board">
+      <path d="M210 58 406 120 388 371H32L14 120Z"/>
+    </clipPath>
+  </defs>
+  <path fill="#ead9a6" d="M210 58 406 120 388 371H32L14 120Z"/>
+  <g clip-path="url(#board)" stroke="#c6a56c" stroke-width="1.15" stroke-opacity=".55" stroke-linecap="round">
+    <path d="M20 132H400M20 148H400M20 164H400M20 180H400M20 196H400M20 212H400M20 228H400M20 244H400M20 260H400M20 276H400M20 292H400M20 308H400M20 324H400M20 340H400M20 356H400"/>
+  </g>
+  <path d="M210 58 406 120 388 371H32L14 120Z" stroke="#e0c98e" stroke-width="1.5" stroke-linejoin="round"/>
+  <g fill="none" stroke="#e23d3a" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke-width="3.2" d="M208 44C184 18 132 16 124 36c-6 16 28 28 78 14"/>
+    <path stroke-width="3.2" d="M212 44C236 18 288 16 296 36c6 16-28 28-78 14"/>
+    <path stroke-width="2.8" d="M202 50c-14 18-30 26-44 36"/>
+    <path stroke-width="2.8" d="M218 50c14 18 30 26 44 36"/>
+  </g>
+  <circle cx="156" cy="90" r="3.4" fill="#e23d3a"/>
+  <circle cx="264" cy="90" r="3.4" fill="#e23d3a"/>
+  <circle cx="210" cy="46" r="4.6" fill="#d43330"/>
+  <path d="M210 50v12" stroke="#e23d3a" stroke-width="2.6" stroke-linecap="round"/>
+  <circle cx="210" cy="80" r="16" fill="#f3c63c"/>
+  <path d="M194 80a16 16 0 0 0 32 0" fill="#e0ac22"/>
+  <ellipse cx="202" cy="73" rx="6" ry="4" fill="#fff6cf"/>
+  <path d="M199 86h22" stroke="#b8861a" stroke-width="1.6" stroke-linecap="round"/>
+</svg>

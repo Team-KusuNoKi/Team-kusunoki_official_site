@@ -1,0 +1,6 @@
+# 救祭アプリの release-save-* は内容ごとに別名で配信するため、ブラウザに長く保持させる。
+# パスは日本語表記とパーセントエンコード表記の両方を指定する。
+/11月の救祭/app/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+/11%E6%9C%88%E3%81%AE%E6%95%91%E7%A5%AD/app/assets/*
+  Cache-Control: public, max-age=31536000, immutable
