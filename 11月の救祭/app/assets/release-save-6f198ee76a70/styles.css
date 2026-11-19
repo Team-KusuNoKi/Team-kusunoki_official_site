@@ -2113,3 +2113,26 @@ dialog.survey-sheet #survey-form .primary-button { min-height: var(--control-hei
 .survey-thanks { display: grid; place-content: center; gap: 6px; min-height: 140px; text-align: center; }
 #survey-form button[type="submit"] { margin-top: 4px; }
 #survey-form button[type="submit"]:disabled { opacity: var(--disabled-opacity-soft); }
+
+
+/* PCの広い画面では、回答パネルを右側に固定してチャットと並べる。 */
+@media (min-width: 1024px) {
+  .shell { max-width: min(1200px, calc(100vw - 40px)); box-shadow: 0 18px 50px #2020201f; }
+  .workspace { --pc-panel-width: clamp(340px, 30vw, 460px); --pc-panel-offset: 0px; }
+  .workspace:has(> .composer-area:not([hidden]):not(.answer-page)) { --pc-panel-offset: calc(var(--pc-panel-width) + 28px); }
+  .chat-area { margin-right: var(--pc-panel-offset); scrollbar-width: thin; }
+  .chat-area::-webkit-scrollbar { display: block; width: 8px; }
+  .chat-area::-webkit-scrollbar-thumb { border-radius: 999px; background: #2020202e; }
+  .chat-area > * { max-width: 660px; margin-inline: auto; }
+  .composer-area:not(.answer-page) {
+    top: calc(var(--play-header-height, 64px) + 8px);
+    right: 14px;
+    bottom: 14px;
+    left: auto;
+    width: var(--pc-panel-width);
+    min-height: 0;
+    max-height: none;
+  }
+  .conversation-notice { left: 0; right: var(--pc-panel-offset); width: fit-content; max-width: calc(100% - var(--pc-panel-offset) - 36px); transform: none; margin-inline: auto; }
+  .workspace:has(> .composer-area:not(.answer-page):not([hidden]):not([inert]))::after { opacity: 0; }
+}

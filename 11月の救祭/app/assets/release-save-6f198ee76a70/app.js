@@ -1352,7 +1352,8 @@ function setComposerExpanded(expanded) {
   // シートの背後に残るFABは、開閉と同じ速さで透過させる。
   if (fab.style) fab.style.opacity = expanded ? '0' : '';
   const opened = expanded && !composer.classList?.contains('answer-page') ? morphFromFab(composer, fab) : null;
-  (opened ?? animateSurface(composer, expanded, 40)).then(finished => {
+  const sidePanel = window.matchMedia('(min-width: 1024px)').matches;
+  (opened ?? animateSurface(composer, expanded, sidePanel ? 28 : 40, sidePanel ? 'X' : 'Y')).then(finished => {
     if (finished && !composerExpanded && composer.isConnected) composer.hidden = true;
   });
   if (!expanded && focusWasInside) fab.focus({ preventScroll: true });
