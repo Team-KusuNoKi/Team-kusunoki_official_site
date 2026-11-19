@@ -453,7 +453,8 @@ function setComposerExpanded(expanded) {
   if (expanded) composer.focus({ preventScroll: true });
   fab.hidden = expanded;
   fab.setAttribute('aria-expanded', String(expanded));
-  animateSurface(composer, expanded).then(finished => {
+  const sidePanel = window.matchMedia('(min-width: 1024px)').matches;
+  animateSurface(composer, expanded, sidePanel ? 28 : 20, sidePanel ? 'X' : 'Y').then(finished => {
     if (finished && !composerExpanded && composer.isConnected) composer.hidden = true;
   });
   if (!expanded) {

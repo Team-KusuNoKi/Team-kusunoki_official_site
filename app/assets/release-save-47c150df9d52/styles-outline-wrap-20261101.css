@@ -651,3 +651,37 @@ dialog.image-gallery { padding-bottom: max(124px, calc(env(safe-area-inset-botto
 .resume-loading-spinner { width: 28px; height: 28px; border: 3px solid var(--surface-hover); border-top-color: var(--accent-ink); border-radius: 50%; animation: resume-loading-spin 800ms linear infinite; }
 @keyframes resume-loading-spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .resume-loading-spinner { animation: none; } }
+
+
+/* PCの広い画面では、回答パネルを右側に固定してチャットと並べる。 */
+@media (min-width: 1024px) {
+  .shell { max-width: min(1200px, calc(100vw - 40px)); box-shadow: 0 18px 50px #2020201f; }
+  .workspace {
+    --pc-panel-width: clamp(340px, 30vw, 460px);
+    --pc-panel-offset: 0px;
+    display: grid;
+    grid-template-rows: auto auto minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .workspace:has(> .composer-area:not([hidden]):not(.answer-page)) { --pc-panel-offset: calc(var(--pc-panel-width) + 28px); }
+  .topbar { grid-column: 1 / -1; grid-row: 1; }
+  .save-status-strip { grid-column: 1 / -1; grid-row: 2; }
+  .chat-area { grid-column: 1; grid-row: 3; scrollbar-width: thin; }
+  .chat-area::-webkit-scrollbar { display: block; width: 8px; }
+  .chat-area::-webkit-scrollbar-thumb { border-radius: 999px; background: #2020202e; }
+  .chat-area > * { max-width: 660px; margin-inline: auto; }
+  .yoi-completion, .q4-pending { grid-column: 1 / -1; grid-row: 3; }
+  .composer-area:not(.answer-page) {
+    position: relative;
+    inset: auto;
+    grid-column: 2;
+    grid-row: 3;
+    width: var(--pc-panel-width);
+    min-height: 0;
+    max-height: none;
+    margin: 0 14px 14px;
+  }
+  .composer-area.answer-page { grid-column: 1 / -1; grid-row: 3; }
+  .conversation-notice { left: 0; right: var(--pc-panel-offset); width: fit-content; max-width: calc(100% - var(--pc-panel-offset) - 36px); transform: none; margin-inline: auto; }
+  .workspace::after { content: none; }
+}
